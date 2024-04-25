@@ -1,3 +1,3 @@
-## SOURCES
-- [1] https://github.com/ThePrimeagen/init.lua
-- [2] https://github.com/nvim-lua/kickstart.nvim
+### SOURCES
+- https://github.com/ThePrimeagen/init.lua
+- https://github.com/nvim-lua/kickstart.nvim
