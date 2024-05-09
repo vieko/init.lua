@@ -24,6 +24,8 @@ return { -- Autoformat
       lua = { "stylua" },
       javascriptreact = { { "prettierd", "prettier" } },
       typescriptreact = { { "prettierd", "prettier" } },
+      javascript = { { "prettierd", "prettier" } },
+      typescript = { { "prettierd", "prettier" } },
     },
   },
 }
