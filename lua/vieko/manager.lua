@@ -16,6 +16,9 @@ require("lazy").setup({
     },
   },
   { import = "vieko.plugins" },
+  change_detection = {
+    notify = false,
+  },
   ui = {
     icons = vim.g.have_nerd_font and {} or {
       cmd = " ",
