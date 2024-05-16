@@ -26,6 +26,7 @@ return { -- Autoformat
       typescriptreact = { { "prettierd", "prettier" } },
       javascript = { { "prettierd", "prettier" } },
       typescript = { { "prettierd", "prettier" } },
+      python = { "black", "flake8" },
     },
   },
 }

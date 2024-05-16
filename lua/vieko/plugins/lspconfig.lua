@@ -71,6 +71,7 @@ return { -- LSP Configuration & Plugins
     -- Enable the following language servers
     -- `:help lspconfig-all` for a list of all the pre-configured LSPs
     local servers = {
+      pylsp = {},
       bashls = {},
       tsserver = {
         --- @diagnostic disable-next-line: unused-local
@@ -102,6 +103,8 @@ return { -- LSP Configuration & Plugins
       "stylua",
       "prettierd",
       "prettier",
+      "black",
+      "flake8",
     })
     require("mason-tool-installer").setup({ ensure_installed = ensure_installed })
 

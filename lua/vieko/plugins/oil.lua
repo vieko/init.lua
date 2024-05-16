@@ -22,14 +22,14 @@ return {
       vim.keymap.set("n", "-", "<CMD>Oil<CR>", { desc = "Open parent directory" })
 
       -- Open parent directory in floating window
-      vim.keymap.set("n", "<space>-", require("oil").toggle_float)
+      -- vim.keymap.set("n", "<space>-", require("oil").toggle_float)
     end,
   },
-  {
-    "refractalize/oil-git-status.nvim",
-    dependencies = {
-      "stevearc/oil.nvim",
-    },
-    config = true,
-  },
+  -- {
+  --   "refractalize/oil-git-status.nvim",
+  --   dependencies = {
+  --     "stevearc/oil.nvim",
+  --   },
+  --   config = true,
+  -- },
 }
