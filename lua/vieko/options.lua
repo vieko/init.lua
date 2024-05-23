@@ -4,7 +4,7 @@ vim.opt.backup = false
 vim.opt.breakindent = true
 vim.opt.clipboard = "unnamedplus"
 vim.opt.cmdheight = 1
-vim.opt.completeopt = { "menuone", "noinsert", "noselect" }
+vim.opt.completeopt = { "menu", "menuone", "noselect" }
 vim.opt.copyindent = true
 vim.opt.colorcolumn = "80"
 vim.opt.cursorcolumn = false
@@ -16,6 +16,7 @@ vim.opt.fillchars = { eob = " " }
 vim.opt.foldenable = false
 vim.opt.foldlevel = 99
 vim.opt.foldlevelstart = 99
+vim.opt.formatoptions:remove("o")
 vim.opt.guicursor = ""
 vim.opt.history = 100
 vim.opt.hlsearch = true
@@ -41,6 +42,7 @@ vim.opt.preserveindent = true
 vim.opt.pumheight = 10
 vim.opt.relativenumber = true
 vim.opt.scrolloff = 8
+vim.opt.shada = { "'10", "<0", "s10", "h" }
 vim.opt.shell = "fish"
 vim.opt.shiftwidth = 2
 vim.opt.showmatch = false

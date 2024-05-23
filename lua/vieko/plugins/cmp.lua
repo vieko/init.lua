@@ -24,11 +24,14 @@ return { -- Autocompletion
     -- Adds other completion capabilities.
     "hrsh7th/cmp-nvim-lsp",
     "hrsh7th/cmp-path",
+    "onsails/lspkind.nvim",
   },
   config = function()
     -- See `:help cmp`
     local cmp = require("cmp")
     local luasnip = require("luasnip")
+    local lspkind = require("lspkind")
+    lspkind.init({})
     luasnip.config.setup({})
     cmp.setup({
       snippet = {
@@ -36,7 +39,7 @@ return { -- Autocompletion
           luasnip.lsp_expand(args.body)
         end,
       },
-      completion = { completeopt = "menu,menuone,noinsert" },
+      completion = { completeopt = "menu,menuone,noselect" },
       -- see `:help ins-completion`
       mapping = cmp.mapping.preset.insert({
         -- select the [n]ext item

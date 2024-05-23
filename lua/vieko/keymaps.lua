@@ -28,6 +28,12 @@ vim.keymap.set("n", "N", "Nzzzv")
 -- prevent capital Q from clobbering the current buffer
 vim.keymap.set("n", "Q", "<nop>")
 
+-- copy, paste and delete with considerations
+vim.keymap.set("x", "<leader>p", '"_dP', { desc = "Paste without yanking" })
+vim.keymap.set({ "n", "v" }, "<leader>y", '"+y', { desc = "Yank to system clipboard" })
+vim.keymap.set("n", "<leader>Y", '"+Y', { desc = "Yank line to system clipboard" })
+vim.keymap.set({ "n", "v" }, "<leader>d", '"_d', { desc = "Delete to blackhole register" })
+
 -- Diagnostic keymaps
 vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, { desc = "Go to previous [D]iagnostic message" })
 vim.keymap.set("n", "]d", vim.diagnostic.goto_next, { desc = "Go to next [D]iagnostic message" })
