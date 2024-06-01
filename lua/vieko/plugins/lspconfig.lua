@@ -19,7 +19,16 @@ return { -- LSP Configuration & Plugins
     },
 
     -- used for completion, annotations and signatures of Neovim apis
-    { "folke/neodev.nvim", opts = {} },
+    {
+      "folke/lazydev.nvim",
+      ft = "lua",
+      opts = {
+        library = {
+          vim.env.LAZY .. "/luvit-meta/library",
+        },
+      },
+    },
+    { "Bilal2453/luvit-meta", lazy = true },
   },
   config = function()
     -- `:help lsp-vs-treesitter`
@@ -102,9 +111,6 @@ return { -- LSP Configuration & Plugins
     vim.list_extend(ensure_installed, {
       "stylua",
       "prettierd",
-      "prettier",
-      "black",
-      "flake8",
     })
     require("mason-tool-installer").setup({ ensure_installed = ensure_installed })
 
@@ -121,7 +127,7 @@ return { -- LSP Configuration & Plugins
     vim.diagnostic.config({
       float = {
         border = _border,
-        source = "always",
+        source = "if_many",
         focusable = false,
         style = "minimal",
         header = "",

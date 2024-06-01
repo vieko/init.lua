@@ -22,11 +22,11 @@ return { -- Autoformat
     end,
     formatters_by_ft = {
       lua = { "stylua" },
-      javascriptreact = { { "prettierd", "prettier" } },
-      typescriptreact = { { "prettierd", "prettier" } },
-      javascript = { { "prettierd", "prettier" } },
-      typescript = { { "prettierd", "prettier" } },
-      python = { "black", "flake8" },
+      javascriptreact = { { "prettierd" } },
+      typescriptreact = { { "prettierd" } },
+      javascript = { { "prettierd" } },
+      typescript = { { "prettierd" } },
+      -- python = { "black", "flake8" },
     },
   },
 }
