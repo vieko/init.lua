@@ -19,16 +19,16 @@ return { -- LSP Configuration & Plugins
     },
 
     -- used for completion, annotations and signatures of Neovim apis
-    {
-      "folke/lazydev.nvim",
-      ft = "lua",
-      opts = {
-        library = {
-          vim.env.LAZY .. "/luvit-meta/library",
-        },
+{
+    "folke/lazydev.nvim",
+    ft = "lua",
+    opts = {
+      library = {
+        "luvit-meta/library",
       },
     },
-    { "Bilal2453/luvit-meta", lazy = true },
+  },
+  { "Bilal2453/luvit-meta", lazy = true },
   },
   config = function()
     -- `:help lsp-vs-treesitter`
