@@ -16,10 +16,12 @@ require("lazy").setup({
     },
   },
   { import = "vieko.plugins" },
+}, {
   change_detection = {
     notify = false,
   },
   ui = {
+    border = "rounded",
     icons = vim.g.have_nerd_font and {} or {
       cmd = " ",
       config = "",
