@@ -12,6 +12,7 @@ return { -- Autoformat
     },
   },
   opts = {
+    log_level = vim.log.levels.DEBUG,
     notify_on_error = false,
     format_on_save = function(bufnr)
       local disable_filetypes = { c = true, cpp = true }
@@ -22,11 +23,10 @@ return { -- Autoformat
     end,
     formatters_by_ft = {
       lua = { "stylua" },
-      javascriptreact = { { "prettierd" } },
-      typescriptreact = { { "prettierd" } },
-      javascript = { { "prettierd" } },
-      typescript = { { "prettierd" } },
-      -- python = { "black", "flake8" },
+      javascriptreact = { { "prettierd", "prettier" } },
+      typescriptreact = { { "prettierd", "prettier" } },
+      javascript = { { "prettierd", "prettier" } },
+      typescript = { { "prettierd", "prettier" } },
     },
   },
 }
