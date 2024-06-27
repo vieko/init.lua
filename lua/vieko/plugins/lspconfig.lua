@@ -82,6 +82,16 @@ return { -- LSP Configuration & Plugins
     local servers = {
       pylsp = {},
       bashls = {},
+      cssls = {
+        settings = {
+          css = {
+            validate = true,
+            lint = {
+              unknownAtRules = "ignore",
+            },
+          },
+        },
+      },
       tsserver = {
         --- @diagnostic disable-next-line: unused-local
         on_attach = function(client, bufnr)
