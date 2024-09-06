@@ -98,7 +98,16 @@ return { -- LSP Configuration & Plugins
           vim.keymap.set("n", "<leader>co", organize_imports, { desc = "LSP: [O]rganize imports", buffer = bufnr })
         end,
       },
-      tailwindcss = {},
+      tailwindcss = {
+        settings = {
+          css = {
+            validate = true,
+            lint = {
+              unknownAtRules = "ignore",
+            },
+          },
+        },
+      },
       lua_ls = {
         -- cmd = {...},
         -- filetypes = { ...},
