@@ -92,7 +92,7 @@ return { -- LSP Configuration & Plugins
           },
         },
       },
-      tsserver = {
+      ts_ls = {
         --- @diagnostic disable-next-line: unused-local
         on_attach = function(client, bufnr)
           vim.keymap.set("n", "<leader>co", organize_imports, { desc = "LSP: [O]rganize imports", buffer = bufnr })

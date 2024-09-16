@@ -74,14 +74,14 @@ vim.g.have_nerd_font = false
 
 -- [[ UTILITIES ]]
 vim.g.clipboard = {
-  name = "xclip",
+  name = "wl-clipboard",
   copy = {
-    ["+"] = "xclip -selection clipboard",
-    ["*"] = "xclip -selection clipboard",
+    ["+"] = "wl-copy",
+    ["*"] = "wl-copy",
   },
   paste = {
-    ["+"] = "xclip -selection clipboard -o",
-    ["*"] = "xclip -selection clipboard -o",
+    ["+"] = "wl-paste --no-newline",
+    ["*"] = "wl-paste --no-newline",
   },
   cache_enabled = 0,
 }
