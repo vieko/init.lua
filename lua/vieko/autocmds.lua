@@ -19,3 +19,12 @@ vim.api.nvim_create_autocmd({ "FocusGained", "BufEnter", "CursorHold", "CursorHo
     vim.api.nvim_command("checktime")
   end,
 })
+
+-- set formatprg for json files
+-- vim.api.nvim_create_autocmd("FileType", {
+--   pattern = "json",
+--   callback = function(ev)
+--     vim.bo[ev.buf].formatexpr = ""
+--     vim.bo[ev.buf].formatprg = "jq"
+--   end,
+-- })

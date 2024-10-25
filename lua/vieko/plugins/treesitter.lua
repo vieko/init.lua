@@ -3,7 +3,19 @@ return { -- highlight, edit, and navigate code
   build = ":TSUpdate",
   dependencies = { "windwp/nvim-ts-autotag" },
   opts = {
-    ensure_installed = { "bash", "c", "html", "lua", "luadoc", "markdown", "vim", "vimdoc", "typescript", "javascript" },
+    ensure_installed = {
+      "bash",
+      "c",
+      "html",
+      "http",
+      "lua",
+      "luadoc",
+      "markdown",
+      "vim",
+      "vimdoc",
+      "typescript",
+      "javascript",
+    },
     auto_install = true,
     highlight = {
       enable = true,
