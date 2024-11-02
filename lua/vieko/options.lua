@@ -1,32 +1,34 @@
 -- [[ OPTIONS ]]
-vim.opt.autoindent = true
-vim.opt.backup = false
-vim.opt.breakindent = true
-vim.opt.clipboard = "unnamedplus"
-vim.opt.cmdheight = 1
-vim.opt.completeopt = { "menu", "menuone", "noselect" }
-vim.opt.copyindent = true
-vim.opt.colorcolumn = "80"
-vim.opt.cursorcolumn = false
-vim.opt.cursorline = true
-vim.opt.errorbells = false
-vim.opt.expandtab = true
-vim.opt.fileencoding = "utf-8"
-vim.opt.fillchars = { eob = " " }
-vim.opt.foldenable = false
-vim.opt.foldlevel = 99
-vim.opt.foldlevelstart = 99
-vim.opt.formatoptions:remove("o")
-vim.opt.guicursor = ""
-vim.opt.history = 100
-vim.opt.hlsearch = true
-vim.opt.ignorecase = true
-vim.opt.inccommand = "split"
-vim.opt.infercase = true
-vim.opt.laststatus = 3
-vim.opt.linebreak = true
-vim.opt.list = true
-vim.opt.listchars = {
+local opt = vim.opt
+
+opt.autoindent = true
+opt.backup = false
+opt.breakindent = true
+opt.clipboard = "unnamedplus"
+opt.cmdheight = 1
+opt.completeopt = { "menu", "menuone", "noselect" }
+opt.copyindent = true
+opt.colorcolumn = "80"
+opt.cursorcolumn = false
+opt.cursorline = true
+opt.errorbells = false
+opt.expandtab = true
+opt.fileencoding = "utf-8"
+opt.fillchars = { eob = " " }
+opt.foldenable = false
+opt.foldlevel = 99
+opt.foldlevelstart = 99
+opt.formatoptions:remove("o")
+opt.guicursor = ""
+opt.history = 100
+opt.hlsearch = true
+opt.ignorecase = true
+opt.inccommand = "split"
+opt.infercase = true
+opt.laststatus = 3
+opt.linebreak = true
+opt.list = true
+opt.listchars = {
   tab = "» ",
   space = "·",
   extends = "›",
@@ -35,42 +37,42 @@ vim.opt.listchars = {
   -- eol = "¬",
   -- trail = ".",
 }
-vim.opt.mouse = "a"
-vim.opt.number = true
-vim.opt.numberwidth = 3
-vim.opt.preserveindent = true
-vim.opt.pumheight = 10
-vim.opt.relativenumber = true
-vim.opt.scrolloff = 8
-vim.opt.shada = { "'10", "<0", "s10", "h" }
-vim.opt.shell = "bash"
-vim.opt.shiftwidth = 2
-vim.opt.showmatch = false
-vim.opt.showmode = false
-vim.opt.showtabline = 0
-vim.opt.shortmess:append("I")
-vim.opt.shortmess:append("c")
-vim.opt.sidescrolloff = 8
-vim.opt.signcolumn = "yes:2"
-vim.opt.smartcase = true
-vim.opt.smartindent = true
-vim.opt.smarttab = true
-vim.opt.softtabstop = 2
-vim.opt.spell = false
-vim.opt.splitbelow = true
-vim.opt.splitright = true
-vim.opt.swapfile = false
-vim.opt.tabstop = 2
-vim.opt.termguicolors = true
-vim.opt.timeoutlen = 300
-vim.opt.undodir = vim.fn.stdpath("data") .. "/undodir"
-vim.opt.undofile = true
-vim.opt.updatetime = 250
-vim.opt.virtualedit = "block"
-vim.opt.wildignorecase = true
-vim.opt.wrap = true -- false
-vim.opt.writebackup = false
-vim.g.have_nerd_font = false
+opt.mouse = "a"
+opt.number = true
+opt.numberwidth = 3
+opt.preserveindent = true
+opt.pumheight = 10
+opt.relativenumber = true
+opt.scrolloff = 8
+opt.shada = { "'10", "<0", "s10", "h" }
+opt.shell = "bash"
+opt.shiftwidth = 2
+opt.showmatch = false
+opt.showmode = false
+opt.showtabline = 0
+opt.shortmess:append("I")
+opt.shortmess:append("c")
+opt.sidescrolloff = 8
+opt.signcolumn = "yes:2"
+opt.smartcase = true
+opt.smartindent = true
+opt.smarttab = true
+opt.softtabstop = 2
+opt.spell = false
+opt.splitbelow = true
+opt.splitright = true
+opt.swapfile = false
+opt.tabstop = 2
+opt.termguicolors = true
+opt.timeoutlen = 300
+opt.undodir = vim.fn.stdpath("data") .. "/undodir"
+opt.undofile = true
+opt.updatetime = 250
+opt.virtualedit = "block"
+opt.wildignorecase = true
+opt.wrap = true -- false
+opt.writebackup = false
+vim.g.have_nerd_font = true
 
 -- [[ UTILITIES ]]
 vim.g.clipboard = {
@@ -93,7 +95,15 @@ vim.g.netrw_banner = 0
 vim.g.netrw_liststyle = 3
 vim.g.netrw_browse_split = 4
 
--- [[ DISABLE BUILTINS ]]
--- vim.g.loaded_netrw = 1
--- vim.g.loaded_netrwplugin = 1
--- vim.g.loaded_netrwsettings = 1
+-- [[ DISABLE BUILTIN LANGUAGE PROVIDERS ]]
+vim.g.loaded_ruby_provider = 0
+vim.g.loaded_perl_provider = 0
+vim.g.loaded_node_provider = 0
+vim.g.loaded_python3_provider = 0
+vim.g.ruby_host_prog = nil
+vim.g.perl_host_prog = nil
+vim.g.node_host_prog = nil
+vim.g.python3_host_prog = nil
+vim.g.loaded_netrw = 1
+vim.g.loaded_netrwplugin = 1
+vim.g.loaded_netrwsettings = 1
