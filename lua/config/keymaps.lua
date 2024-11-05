@@ -257,11 +257,11 @@ local function setup_utils()
 end
 
 local function setup_maybe_remove()
-  map("n", "<leader>xl", "<cmd>lopen<cr>", { desc = "Location List" })
-  map("n", "<leader>xq", "<cmd>copen<cr>", { desc = "Quickfix List" })
+  -- map("n", "<leader>xl", "<cmd>lopen<cr>", { desc = "Location List" })
+  -- map("n", "<leader>xq", "<cmd>copen<cr>", { desc = "Quickfix List" })
 
-  map("n", "[q", ":cprev<CR>zz", { desc = "Previous Quickfix item" })
-  map("n", "]q", ":cnext<CR>zz", { desc = "Next Quickfix item" })
+  -- map("n", "[q", ":cprev<CR>zz", { desc = "Previous Quickfix item" })
+  -- map("n", "]q", ":cnext<CR>zz", { desc = "Next Quickfix item" })
 
   -- Fix Spell checking
   map("n", "z0", "1z=", {
@@ -275,7 +275,7 @@ function M.setup()
   -- setup keymaps
   setup_navigation_maps()
   setup_window_management()
-  setup_clipboard_operations()
+  -- setup_clipboard_operations()
   setup_diagnostic_navigation()
   setup_quality_of_life_tweaks()
   setup_buffer_operations()

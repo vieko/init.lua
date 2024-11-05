@@ -41,10 +41,10 @@ return { -- Fuzzy Finder (files, lsp, etc)
 
     vim.keymap.set("n", "<leader>/", function()
       builtin.current_buffer_fuzzy_find(require("telescope.themes").get_dropdown({
-        winblend = 10,
+        winblend = 0,
         previewer = false,
       }))
-    end, { desc = "[/] fuzzily search in current buffer" })
+    end, { desc = "Fuzzy Search in Current Buffer" })
 
     vim.keymap.set("n", "<leader>s/", function()
       builtin.live_grep({

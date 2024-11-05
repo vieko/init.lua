@@ -254,27 +254,27 @@ return {
       {
         "<leader>xx",
         "<cmd>Trouble diagnostics toggle<cr>",
-        desc = "Diagnostics (Trouble)",
+        desc = "Diagnostics",
       },
       {
         "<leader>xX",
         "<cmd>Trouble diagnostics toggle filter.buf=0<cr>",
-        desc = "Buffer Diagnostics (Trouble)",
+        desc = "Buffer Diagnostics",
       },
       {
         "<leader>cs",
         "<cmd>Trouble symbols toggle focus=false<cr>",
-        desc = "Symbols (Trouble)",
+        desc = "Symbols",
       },
       {
         "<leader>xL",
         "<cmd>Trouble loclist toggle<cr>",
-        desc = "Location List (Trouble)",
+        desc = "Location List",
       },
       {
         "<leader>xQ",
         "<cmd>Trouble qflist toggle<cr>",
-        desc = "Quickfix List (Trouble)",
+        desc = "Quickfix List",
       },
     },
     icons = {

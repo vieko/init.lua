@@ -3,6 +3,15 @@ local typescript_lsp = vim.g.typescript_lsp or "vtsls" -- ts_ls or vtsls
 
 return {
   {
+    "folke/which-key.nvim",
+    optional = true,
+    opts = {
+      spec = {
+        { "<leader>ct", group = "Two Slash" },
+      },
+    },
+  },
+  {
     "neovim/nvim-lspconfig",
     dependencies = {
       -- Typescript formatter
@@ -19,8 +28,8 @@ return {
           highlight = "Type", -- to set up a highlight group for the virtual text
         },
         keys = {
-          { "<leader>dt", ":TwoslashQueriesEnable<cr>", desc = "Enable twoslash queries" },
-          { "<leader>dd", ":TwoslashQueriesInspect<cr>", desc = "Inspect twoslash queries" },
+          { "<leader>cte", ":TwoslashQueriesEnable<cr>", desc = "Enable twoslash queries" },
+          { "<leader>cti", ":TwoslashQueriesInspect<cr>", desc = "Inspect twoslash queries" },
         },
       },
     },
@@ -58,7 +67,7 @@ return {
                 vim.lsp.buf.code_action({
                   apply = true,
                   context = {
-                    only = { "source.removeUnused" },
+                    only = { "source.removeUnused.ts" },
                     diagnostics = {},
                   },
                 })
