@@ -40,6 +40,7 @@ return {
   {
     "CopilotC-Nvim/CopilotChat.nvim",
     branch = "canary",
+    enabled = false,
     dependencies = {
       { "nvim-lua/plenary.nvim" },
     },
