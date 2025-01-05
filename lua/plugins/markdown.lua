@@ -26,6 +26,7 @@ return {
     dependencies = { "nvim-treesitter/nvim-treesitter" },
     opts = {
       latex = { enabled = false },
+      enabled = false,
     },
     ft = { "markdown" },
     keys = {
