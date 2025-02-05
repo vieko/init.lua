@@ -64,16 +64,16 @@ return {
 
           -- <c-l> will move you to the right of each of the expansion locations.
           -- <c-h> is similar, except moving you backwards.
-          ["<C-l>"] = cmp.mapping(function()
-            if luasnip.expand_or_locally_jumpable() then
-              luasnip.expand_or_jump()
-            end
-          end, { "i", "s" }),
-          ["<C-h>"] = cmp.mapping(function()
-            if luasnip.locally_jumpable(-1) then
-              luasnip.jump(-1)
-            end
-          end, { "i", "s" }),
+          -- ["<C-l>"] = cmp.mapping(function()
+          --   if luasnip.expand_or_locally_jumpable() then
+          --     luasnip.expand_or_jump()
+          --   end
+          -- end, { "i", "s" }),
+          -- ["<C-h>"] = cmp.mapping(function()
+          --   if luasnip.locally_jumpable(-1) then
+          --     luasnip.jump(-1)
+          --   end
+          -- end, { "i", "s" }),
         }),
         sources = {
           { name = "nvim_lsp", group_index = 2 },
@@ -109,8 +109,8 @@ return {
       keymap("i", "<C-i>", "<Plug>(copilot-accept-line)", opts)
 
       -- set <C-j> to next suggestion, <C-k> to previous suggestion
-      keymap("i", "<C-j>", "<Plug>(copilot-next)", opts)
-      keymap("i", "<C-k>", "<Plug>(copilot-previous)", opts)
+      -- keymap("i", "<C-j>", "<Plug>(copilot-next)", opts)
+      -- keymap("i", "<C-k>", "<Plug>(copilot-previous)", opts)
 
       -- set <C-d> to dismiss suggestion
       keymap("i", "<C-d>", "<Plug>(copilot-dismiss)", opts)
