@@ -27,7 +27,7 @@ return {
         cursorlinenr = "Visual",
         backdrop = "FzfLuaBackdrop",
       },
-      fzf_colors = false,
+      fzf_colors = true,
       -- History file
       fzf_opts = {
         ["--history"] = vim.fn.stdpath("data") .. "/fzf-lua-history",
@@ -104,7 +104,7 @@ return {
       config.defaults.actions.files["alt-."] = actions.toggle_hidden
 
       -- Trouble
-      config.defaults.actions.files["ctrl-t"] = require("trouble.sources.fzf").actions.open
+      -- config.defaults.actions.files["ctrl-t"] = require("trouble.sources.fzf").actions.open
 
       -- Refer https://github.com/ibhagwan/fzf-lua/blob/main/lua/fzf-lua/defaults.lua#L69 for default keymaps
       -- Shift+up/down to move the preview window

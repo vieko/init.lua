@@ -89,6 +89,7 @@ return {
   { -- useful plugin to show you pending keybinds.
     "folke/which-key.nvim",
     event = "VeryLazy",
+    enabled = false,
     opts_extend = { "spec" },
     opts = {
       defaults = {},
@@ -173,6 +174,7 @@ return {
   },
   { -- toggleterm
     "akinsho/toggleterm.nvim",
+    enabled = false,
     opts = {
       size = 20,
       open_mapping = [[<c-_>]],
@@ -237,8 +239,9 @@ return {
   },
   { -- Trouble
     "folke/trouble.nvim",
+    enabled = false,
     config = function()
-      require("trouble").setup({})
+      require("trouble").setup()
       require("trouble.format").formatters.file_icon = function()
         return ""
       end
@@ -342,7 +345,7 @@ return {
   {
     "folke/flash.nvim",
     event = "VeryLazy",
-    ---@type Flash.Config
+    enabled = false,
     opts = {
       modes = {
         search = {
