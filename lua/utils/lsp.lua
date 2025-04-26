@@ -18,6 +18,7 @@ local kind_filter = {
   },
   markdown = false,
   help = false,
+  -- you can specify a different filter for each filetype
   lua = {
     "Class",
     "Constructor",
@@ -38,6 +39,24 @@ local M = {
   kind_filter = kind_filter,
 }
 
+-- Get default LSP keymaps without any plugin dependencies
+function M.get_default_keymaps()
+  return {
+    { keys = "<leader>ca", func = vim.lsp.buf.code_action, desc = "Code Actions" },
+    { keys = "<leader>.", func = vim.lsp.buf.code_action, desc = "Code Actions" },
+    { keys = "<leader>cA", func = M.action.source, desc = "Source Actions" },
+    { keys = "<leader>cr", func = vim.lsp.buf.rename, desc = "Code Rename" },
+    { keys = "<leader>cf", func = vim.lsp.buf.format, desc = "Code Format" },
+    { keys = "<leader>k", func = vim.lsp.buf.hover, desc = "Documentation", has = "hoverProvider" },
+    { keys = "K", func = vim.lsp.buf.hover, desc = "Documentation", has = "hoverProvider" },
+    { keys = "gd", func = vim.lsp.buf.definition, desc = "Goto Definition", has = "definitionProvider" },
+    { keys = "gD", func = vim.lsp.buf.declaration, desc = "Goto Declaration", has = "declarationProvider" },
+    { keys = "gr", func = vim.lsp.buf.references, desc = "Goto References", has = "referencesProvider", nowait = true },
+    { keys = "gi", func = vim.lsp.buf.implementation, desc = "Goto Implementation", has = "implementationProvider" },
+    { keys = "gy", func = vim.lsp.buf.type_definition, desc = "Goto Type Definition", has = "typeDefinitionProvider" },
+  }
+end
+
 function M.get_kind_filter(buf)
   buf = (buf == nil or buf == 0) and vim.api.nvim_get_current_buf() or buf
   local ft = vim.bo[buf].filetype
@@ -53,6 +72,7 @@ function M.get_kind_filter(buf)
   return type(M.kind_filter) == "table" and type(M.kind_filter.default) == "table" and M.kind_filter.default or nil
 end
 
+--- Get the path of the config file in the current directory or the root of the git repo
 ---@param filename string
 ---@return string | nil
 local function get_config_path(filename)
@@ -62,6 +82,8 @@ local function get_config_path(filename)
     return current_dir
   end
 
+  -- If the current directory is a git repo, check if the root of the repo
+  -- contains a biome.json file
   local git_root = Path.get_git_root()
   if Path.is_git_repo() and git_root ~= current_dir then
     config_file = git_root .. "/" .. filename
@@ -77,7 +99,7 @@ M.start_lsp_client_by_name = function(name, opts)
   local clients = M.get_clients()
   for _, client in ipairs(clients) do
     if client.name == name then
-      vim.notify("LSP Client: " .. name .. " is already running", vim.log.levels.INFO, { title = "LSP" })
+      vim.notify("LSP client: " .. name .. " is already running", vim.log.levels.INFO, { title = "LSP" })
       return
     end
   end
@@ -86,7 +108,6 @@ M.start_lsp_client_by_name = function(name, opts)
 end
 
 M.stop_lsp_client_by_name = function(name)
-  ---@diagnostic disable-next-line: deprecated
   local clients = vim.lsp.get_active_clients()
   for _, client in ipairs(clients) do
     if client.name == name then
@@ -135,7 +156,6 @@ M.eslint_config_exists = function()
     ".eslintrc.json",
     ".eslintrc",
     "eslint.config.js",
-    "eslint.config.mjs",
   }
 
   for _, file in ipairs(config_files) do
