@@ -1,19 +1,5 @@
 local Lsp = require("utils.lsp")
-local typescript_lsp = "both" -- Options: "vtsls", "ts_ls", or "both"
-
--- Define specific keymaps for TypeScript actions
-local function setup_ts_keymaps(bufnr)
-  local keymap_opts = { buffer = bufnr, silent = true }
-  -- Go to source definition (vtsls)
-  vim.keymap.set("n", "gD", function()
-    local params = vim.lsp.util.make_position_params(0, "utf-8")
-    Lsp.execute({
-      command = "typescript.goToSourceDefinition",
-      arguments = { params.textDocument.uri, params.position },
-      open = true,
-    })
-  end, vim.tbl_extend("force", keymap_opts, { desc = "Goto Source Definition" }))
-end
+local typescript_lsp = "ts_ls" -- Only using vtsls
 
 return {
   {
@@ -112,35 +98,6 @@ return {
             },
           },
         },
-        vtsls = {
-          settings = {
-            complete_function_calls = true,
-            vtsls = {
-              enableMoveToFileCodeAction = true,
-              autoUseWorkspaceTsdk = true,
-              experimental = {
-                completion = {
-                  enableServerSideFuzzyMatch = true,
-                },
-              },
-            },
-            typescript = {
-              updateImportsOnFileMove = { enabled = "always" },
-              suggest = {
-                completeFunctionCalls = true,
-              },
-              inlayHints = {
-                parameterNames = { enabled = "literals" },
-                parameterTypes = { enabled = false },
-                variableTypes = { enabled = false },
-                propertyDeclarationTypes = { enabled = false },
-                functionLikeReturnTypes = { enabled = true },
-                enumMemberValues = { enabled = true },
-              },
-              tsserver = { "maxTsServerMemory", 16184 },
-            },
-          },
-        },
       },
       -- Enable this to enable the builtin LSP inlay hints on Neovim >= 0.10.0
       -- Be aware that you also will need to properly configure your LSP server to
@@ -155,43 +112,10 @@ return {
         enabled = false, -- Run `lua vim.lsp.codelens.refresh({ bufnr = 0 })` for refreshing code lens
       },
       setup = {
-        -- Setup vtsls
-        vtsls = function(_, _)
-          if Lsp.deno_config_exist() then
-            return true
-          end
-
-          if typescript_lsp == "ts_ls" then
-            return true
-          end
-
-          Lsp.on_attach(function(client, bufnr)
-            if client.name == "vtsls" then
-              -- Attach twoslash queries
-              require("twoslash-queries").attach(client, bufnr)
-              -- Setup TypeScript-specific keymaps
-              setup_ts_keymaps(bufnr)
-            end
-          end)
-        end,
-        -- Setup ts_ls
-        ts_ls = function(_, _)
-          if Lsp.deno_config_exist() then
-            return true
-          end
-
-          if typescript_lsp == "vtsls" then
-            return true
-          end
-
+        ts_ls = function(_)
           Lsp.on_attach(function(client, bufnr)
             if client.name == "ts_ls" then
-              -- Attach twoslash queries
               require("twoslash-queries").attach(client, bufnr)
-              -- If we don't have vtsls, setup the keymaps here
-              if typescript_lsp ~= "both" then
-                setup_ts_keymaps(bufnr)
-              end
             end
           end)
         end,
@@ -199,4 +123,3 @@ return {
     },
   },
 }
-
