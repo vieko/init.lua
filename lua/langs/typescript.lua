@@ -1,5 +1,19 @@
 local Lsp = require("utils.lsp")
-local typescript_lsp = "vtsls" -- ts_ls
+local typescript_lsp = "both" -- Options: "vtsls", "ts_ls", or "both"
+
+-- Define specific keymaps for TypeScript actions
+local function setup_ts_keymaps(bufnr)
+  local keymap_opts = { buffer = bufnr, silent = true }
+  -- Go to source definition (vtsls)
+  vim.keymap.set("n", "gD", function()
+    local params = vim.lsp.util.make_position_params(0, "utf-8")
+    Lsp.execute({
+      command = "typescript.goToSourceDefinition",
+      arguments = { params.textDocument.uri, params.position },
+      open = true,
+    })
+  end, vim.tbl_extend("force", keymap_opts, { desc = "Goto Source Definition" }))
+end
 
 return {
   {
@@ -32,39 +46,10 @@ return {
           single_file_support = false,
           handlers = {
             -- format error code with better error message
-            ["textDocument/publishDiagnostics"] = function(err, result, ctx, config)
-              require("ts-error-translator").translate_diagnostics(err, result, ctx, config)
-              vim.lsp.diagnostic.on_publish_diagnostics(err, result, ctx, config)
+            ["textDocument/publishDiagnostics"] = function(err, result, ctx)
+              require("ts-error-translator").translate_diagnostics(err, result, ctx)
+              vim.lsp.diagnostic.on_publish_diagnostics(err, result, ctx)
             end,
-          },
-          -- add keymap
-          keys = {
-            {
-              "<leader>co",
-              function()
-                vim.lsp.buf.code_action({
-                  apply = true,
-                  context = {
-                    only = { "source.organizeImports" },
-                    diagnostics = {},
-                  },
-                })
-              end,
-              desc = "Organize Imports",
-            },
-            {
-              "<leader>cR",
-              function()
-                vim.lsp.buf.code_action({
-                  apply = true,
-                  context = {
-                    only = { "source.removeUnused" },
-                    diagnostics = {},
-                  },
-                })
-              end,
-              desc = "Remove Unused Imports",
-            },
           },
           -- inlay hints & code lens, refer to https://github.com/typescript-language-server/typescript-language-server/blob/master/docs/configuration.md/#workspacedidchangeconfiguration
           settings = {
@@ -155,47 +140,6 @@ return {
               tsserver = { "maxTsServerMemory", 16184 },
             },
           },
-          keys = {
-            {
-              "gD",
-              function()
-                local params = vim.lsp.util.make_position_params()
-                Lsp.execute({
-                  command = "typescript.goToSourceDefinition",
-                  arguments = { params.textDocument.uri, params.position },
-                  open = true,
-                })
-              end,
-              desc = "Goto Source Definition",
-            },
-            {
-              "<leader>co",
-              Lsp.action["source.organizeImports"],
-              desc = "Organize Imports",
-            },
-            {
-              "<leader>cM",
-              Lsp.action["source.addMissingImports.ts"],
-              desc = "Add missing imports",
-            },
-            {
-              "<leader>cu",
-              Lsp.action["source.removeUnused.ts"],
-              desc = "Remove unused imports",
-            },
-            {
-              "<leader>cD",
-              Lsp.action["source.fixAll.ts"],
-              desc = "Fix all diagnostics",
-            },
-            {
-              "<leader>cv",
-              function()
-                Lsp.execute({ command = "typescript.selectTypeScriptVersion" })
-              end,
-              desc = "Select TS workspace version",
-            },
-          },
         },
       },
       -- Enable this to enable the builtin LSP inlay hints on Neovim >= 0.10.0
@@ -211,8 +155,8 @@ return {
         enabled = false, -- Run `lua vim.lsp.codelens.refresh({ bufnr = 0 })` for refreshing code lens
       },
       setup = {
-        -- Disable vtsls
-        vtsls = function(_, opts)
+        -- Setup vtsls
+        vtsls = function(_, _)
           if Lsp.deno_config_exist() then
             return true
           end
@@ -225,11 +169,13 @@ return {
             if client.name == "vtsls" then
               -- Attach twoslash queries
               require("twoslash-queries").attach(client, bufnr)
+              -- Setup TypeScript-specific keymaps
+              setup_ts_keymaps(bufnr)
             end
           end)
-          Lsp.register_keymaps("vtsls", opts.keys, "TS")
         end,
-        ts_ls = function(_, opts)
+        -- Setup ts_ls
+        ts_ls = function(_, _)
           if Lsp.deno_config_exist() then
             return true
           end
@@ -242,11 +188,15 @@ return {
             if client.name == "ts_ls" then
               -- Attach twoslash queries
               require("twoslash-queries").attach(client, bufnr)
+              -- If we don't have vtsls, setup the keymaps here
+              if typescript_lsp ~= "both" then
+                setup_ts_keymaps(bufnr)
+              end
             end
           end)
-          Lsp.register_keymaps("ts_ls", opts.keys, "Typescript")
         end,
       },
     },
   },
 }
+

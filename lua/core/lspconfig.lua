@@ -37,7 +37,28 @@ local setup_keymaps = function(client, buffer)
     Snacks.picker.lsp_workspace_symbols()
   end, "Find symbol in entire project")
   map("K", vim.lsp.buf.hover, "Show hover")
-  map("g.", vim.lsp.buf.code_action, "Open the code actions menu", { "n", "x" })
+  -- Create a function to determine which TypeScript actions to show
+  local function ts_code_actions()
+    local buf = vim.api.nvim_get_current_buf()
+    local ft = vim.bo[buf].filetype
+    -- Only apply special handling for TypeScript files
+    if ft == "typescript" or ft == "typescriptreact" or ft == "javascript" or ft == "javascriptreact" then
+      -- Check if the LspTypescriptSourceAction command exists
+      local commands = vim.api.nvim_buf_get_commands(buf, {})
+      if commands.LspTypescriptSourceAction then
+        vim.cmd("LspTypescriptSourceAction")
+        return
+      end
+    end
+    -- Default behavior for non-TS files or if command doesn't exist
+    vim.lsp.buf.code_action({
+      context = {
+        only = { "source" },
+        diagnostics = {},
+      },
+    })
+  end
+  map("g.", ts_code_actions, "Open source actions menu", { "n", "x" })
 
   if client and client.server_capabilities.inlayHintProvider and vim.lsp.inlay_hint then
     map("<leader>th", function()
@@ -68,7 +89,7 @@ return {
           virtual_text = {
             spacing = 4,
             source = "if_many",
-            prefix = "",
+            prefix = "",
           },
           severity_sort = true,
           signs = {
@@ -92,7 +113,6 @@ return {
             },
           },
         },
-        ---@type lspconfig.options
         servers = {
           cssls = {
             settings = {
@@ -104,7 +124,6 @@ return {
             },
           },
         },
-        ---@type table<string, fun(server:string, opts:lspconfig.options):boolean?>
         setup = {},
       }
     end,
@@ -234,3 +253,4 @@ return {
     end,
   },
 }
+
