@@ -19,11 +19,11 @@ opt.expandtab = true
 opt.exrc = true
 opt.secure = true
 opt.fileencoding = "utf-8"
-opt.fillchars = { eob = " " }
-opt.foldmethod = "syntax"
-opt.foldenable = true
-opt.foldlevel = 99
-opt.foldlevelstart = 99
+-- opt.fillchars = { eob = " " }
+-- opt.foldmethod = "syntax"
+-- opt.foldenable = true
+-- opt.foldlevel = 99
+-- opt.foldlevelstart = 99
 opt.formatoptions:remove("o")
 opt.foldcolumn = "0"
 opt.guicursor = ""
@@ -82,6 +82,21 @@ opt.wildignorecase = true
 opt.wrap = true -- false
 opt.writebackup = false
 vim.g.have_nerd_font = true
+
+-- [[ FOLDING ]]
+opt.fillchars = {
+  foldopen = "",
+  foldclose = "",
+  fold = " ",
+  foldsep = " ",
+  diff = "╱",
+  eob = " ",
+}
+opt.foldlevel = 99
+opt.smoothscroll = true
+opt.foldexpr = "v:lua.require'utils.ui'.foldexpr()"
+opt.foldmethod = "expr"
+opt.foldtext = "v:lua.require'utils.ui'.foldtext()"
 
 -- [[ UTILITIES ]]
 vim.g.clipboard = {
