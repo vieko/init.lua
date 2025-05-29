@@ -7,7 +7,7 @@ return {
         "eslint_d",
         "oxlint",
         "shellcheck",
-        "golangci-lint",  -- add golangci-lint to mason
+        "golangci-lint", -- add golangci-lint to mason
       },
     },
   },
@@ -21,7 +21,7 @@ return {
         typescript = { "oxlint" },
         javascriptreact = { "oxlint" },
         typescriptreact = { "oxlint" },
-        go = { "golangcilint" },  -- register for Go files
+        go = { "golangcilint" }, -- register for Go files
       },
       linters = {
         eslint_d = {
@@ -40,30 +40,29 @@ return {
         golangcilint = {
           cmd = "golangci-lint", -- Point to the executable with hyphen
           args = {
-            'run',
-            '--out-format',
-            'json',
-            '--issues-exit-code=0',
-            '--show-stats=false',
-            '--print-issued-lines=false',
-            '--print-linter-name=false',
+            "run",
+            "--out-format",
+            "json",
+            "--issues-exit-code=0",
+            "--show-stats=false",
+            "--print-issued-lines=false",
+            "--print-linter-name=false",
             function()
               return vim.fn.fnamemodify(vim.api.nvim_buf_get_name(0), ":h")
-            end
+            end,
           },
           stdin = false,
           append_fname = false,
           stream = "stdout",
           ignore_exitcode = true,
           parser = function(output, bufnr)
-            if output == '' then
+            if output == "" then
               return {}
             end
             local decoded = vim.json.decode(output)
-            if decoded["Issues"] == nil or type(decoded["Issues"]) == 'userdata' then
+            if decoded["Issues"] == nil or type(decoded["Issues"]) == "userdata" then
               return {}
             end
-
             local diagnostics = {}
             for _, item in ipairs(decoded["Issues"]) do
               local curfile = vim.api.nvim_buf_get_name(bufnr)
@@ -84,7 +83,6 @@ return {
                 elseif item.Severity == "hint" then
                   severity = vim.diagnostic.severity.HINT
                 end
-                
                 table.insert(diagnostics, {
                   lnum = item.Pos.Line > 0 and item.Pos.Line - 1 or 0,
                   col = item.Pos.Column > 0 and item.Pos.Column - 1 or 0,
@@ -138,7 +136,7 @@ return {
             -- Check the if the linter is available, otherwise it will throw an error.
             for _, name in ipairs(names) do
               -- Skip the executable check - trust our custom defined linters
-              if lint.linters[name] == nil then 
+              if lint.linters[name] == nil then
                 vim.notify("Linter " .. name .. " is not available", vim.log.levels.INFO)
               else
                 -- Run the linter
@@ -151,3 +149,4 @@ return {
     end,
   },
 }
+
