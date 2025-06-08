@@ -1,3 +1,4 @@
+vim.env.ESLINT_D_PPID = vim.fn.getpid()
 return {
   {
     "williamboman/mason.nvim",
@@ -17,25 +18,26 @@ return {
     opts = {
       linters_by_ft = {
         sh = { "shellcheck" },
-        javascript = { "oxlint" },
-        typescript = { "oxlint" },
-        javascriptreact = { "oxlint" },
-        typescriptreact = { "oxlint" },
+        javascript = { "eslint_d" }, -- oxlint
+        typescript = { "eslint_d" }, -- oxlint
+        javascriptreact = { "eslint_d" }, -- oxlint
+        typescriptreact = { "eslint_d" }, -- oxlint
         go = { "golangcilint" }, -- register for Go files
       },
       linters = {
-        eslint_d = {
-          args = {
-            "--no-warn-ignored", -- Ignore warnings, support Eslint 9
-            "--format",
-            "json",
-            "--stdin",
-            "--stdin-filename",
-            function()
-              return vim.api.nvim_buf_get_name(0)
-            end,
-          },
-        },
+        -- eslint_d = {
+        --   cmd = "eslint_d",
+        --   args = {
+        --     "--no-warn-ignored",
+        --     "--format",
+        --     "json",
+        --     "--stdin",
+        --     "--stdin-filename",
+        --     function()
+        --       return vim.api.nvim_buf_get_name(0)
+        --     end,
+        --   },
+        -- },
         -- Define a custom golangcilint linter that points to the correct executable
         golangcilint = {
           cmd = "golangci-lint", -- Point to the executable with hyphen
@@ -149,4 +151,3 @@ return {
     end,
   },
 }
-
