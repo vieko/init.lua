@@ -59,7 +59,7 @@ return {
         bigfile = { enabled = true },
         words = { enabled = false },
         util = { enabled = true },
-        image = { enabled = true },
+        image = { enabled = false },
         git = { enabled = true },
         win = { enabled = false },
       })
