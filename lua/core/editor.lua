@@ -174,6 +174,7 @@ return {
                 hint = "H",
               },
             },
+            { "filename", path = 1 },
           },
           lualine_x = {
             {
