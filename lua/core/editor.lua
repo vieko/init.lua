@@ -3,6 +3,10 @@ local highlight = require("config/highlights")
 local colors = highlight.colors
 local defaults = highlight.defaults
 return {
+  { -- git integration
+    "tpope/vim-fugitive",
+    lazy = false,
+  },
   { -- detect tabstops and shiftwidth automatically
     "tpope/vim-sleuth",
   },
