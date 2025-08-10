@@ -2,7 +2,7 @@
 return {
   { -- git integration
     "tpope/vim-fugitive",
-    cmd = { "Git", "Gstatus", "Gdiff", "Gblame", "Glog", "Gclog" },
+    cmd = { "Git", "G", "Gdiffsplit", "Gclog" },
   },
   { -- detect tabstops and shiftwidth automatically
     "tpope/vim-sleuth",
