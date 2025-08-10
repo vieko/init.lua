@@ -342,14 +342,14 @@ return {
     "kylechui/nvim-surround",
     enabled = true,
     version = "*",
-    event = "VeryLazy",
+    event = { "BufReadPost", "BufNewFile" },
     config = function()
       require("nvim-surround").setup({})
     end,
   },
   {
     "lukas-reineke/virt-column.nvim",
-    event = "VeryLazy",
+    event = { "BufReadPost", "BufNewFile" },
     config = function()
       require("virt-column").setup({
         enabled = true,

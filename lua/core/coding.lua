@@ -86,7 +86,7 @@ return {
   },
   { -- better text-objects
     "echasnovski/mini.ai",
-    event = "VeryLazy",
+    event = { "BufReadPost", "BufNewFile" },
     config = function()
       local ai = require("mini.ai")
       ai.setup()
@@ -94,7 +94,7 @@ return {
   },
   { -- Auto pairs
     "echasnovski/mini.pairs",
-    event = "VeryLazy",
+    event = "InsertEnter",
     opts = {
       modes = { insert = true, command = true, terminal = false },
       skip_next = [=[[%w%%%'%[%"%.%`%$]]=],
@@ -105,7 +105,7 @@ return {
   },
   { -- Code comment
     "folke/ts-comments.nvim",
-    event = "VeryLazy",
+    event = { "BufReadPost", "BufNewFile" },
     opts = {},
   },
 }
