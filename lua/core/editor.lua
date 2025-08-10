@@ -164,7 +164,7 @@ return {
       vim.o.laststatus = vim.g.lualine_laststatus
       ll.setup({
         options = {
-          theme = "catppuccin",
+          theme = "onedark",
           icons_enabled = false,
           component_separators = { left = "", right = "" },
           section_separators = { left = "", right = "" },
