@@ -201,7 +201,7 @@ return {
   },
   {
     "akinsho/bufferline.nvim",
-    event = "VeryLazy",
+    event = { "VimEnter", "BufReadPost", "BufNewFile" },
     config = function()
       local bl = require("bufferline")
       bl.setup({
