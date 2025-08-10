@@ -19,7 +19,9 @@ return {
           },
         },
       })
-      vim.cmd.colorscheme("catppuccin")
+      if not vim.g.tinted_theme_loaded then
+        vim.cmd.colorscheme("catppuccin")
+      end
     end,
   },
 }

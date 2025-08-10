@@ -16,6 +16,7 @@ end
 vim.opt.rtp:prepend(lazypath)
 
 require("config.lazy").load("options")
+require("config.lazy").load("theme")
 
 local spec = {
   { import = "core.editor" },
@@ -77,11 +78,4 @@ require("lazy").setup({
 })
 
 require("config.lazy").setup()
-
--- Defer highlights setup for better startup performance
-vim.api.nvim_create_autocmd("User", {
-  pattern = "VeryLazy",
-  callback = function()
-    require("config.highlights").setup()
-  end,
-})
+require("config.highlights").setup()
