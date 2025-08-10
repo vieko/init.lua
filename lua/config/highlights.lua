@@ -873,8 +873,7 @@ local function setup_plugins_highlights()
   -- MISC
   hl("MiniCursorword", { bg = defaults.editor.line.active })
   hl("VirtColumn", { fg = with_alpha(colors.gui05, 0.10) })
-  -- BUFFERLINE
-  -- hl("BufferLineBackground", { fg = defaults.guifg, bg = defaults.ui.surface.background })
+  -- BUFFERLINE - Let tinted-theming handle colors
 end
 
 local function setup_zed_tweaks()

@@ -64,6 +64,7 @@ opt.splitright = true
 opt.swapfile = false
 opt.tabstop = 2
 opt.termguicolors = true
+opt.background = "dark"
 opt.timeoutlen = 300
 opt.undodir = vim.fn.stdpath("data") .. "/undodir"
 opt.viewdir = vim.fn.stdpath("data") .. "/viewdir"

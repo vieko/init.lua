@@ -201,12 +201,10 @@ return {
   },
   {
     "akinsho/bufferline.nvim",
-    event = "VeryLazy",
+    event = { "VimEnter", "BufReadPost", "BufNewFile" },
     config = function()
-      -- Defer setup to ensure highlights are loaded
-      vim.schedule(function()
-        local bl = require("bufferline")
-        bl.setup({
+      local bl = require("bufferline")
+      bl.setup({
         options = {
           indicator = {
             icon = " ",
@@ -215,7 +213,6 @@ return {
           style_preset = {
             bl.style_preset.minimal,
             bl.style_preset.no_italic,
-            bl.style_preset.no_bold,
           },
           numbers = function(opts)
             return string.format("%s", opts.ordinal)
@@ -239,15 +236,14 @@ return {
             },
           },
         },
-        })
-        vim.api.nvim_create_autocmd({ "BufAdd", "BufDelete" }, {
-          callback = function()
-            vim.schedule(function()
-              pcall(nvim_bufferline)
-            end)
-          end,
-        })
-      end)
+      })
+      vim.api.nvim_create_autocmd({ "BufAdd", "BufDelete" }, {
+        callback = function()
+          vim.schedule(function()
+            pcall(nvim_bufferline)
+          end)
+        end,
+      })
     end,
   },
   { -- notifications

@@ -16,12 +16,12 @@ if file_exists(theme_script_path) then
   vim.o.termguicolors = true
   vim.g.tinted_colorspace = 256
   vim.g.tinted_background_transparent = 1
+  vim.g.tinted_theme_loaded = true
 
   vim.cmd("source " .. theme_script_path)
 
   vim.api.nvim_create_autocmd("FocusGained", {
     group = group,
-    pattern = "VeryLazy",
     callback = handle_focus_gained,
   })
 end
