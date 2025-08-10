@@ -24,7 +24,6 @@ local spec = {
   { import = "core.lspconfig" },
   { import = "core.treesitter" },
   { import = "plugins.conform" },
-  { import = "plugins.dropbar" },
   { import = "plugins.eslint" },
   { import = "plugins.nvim-lint" },
   { import = "plugins.snacks" },

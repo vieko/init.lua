@@ -69,56 +69,6 @@ return {
       })
     end,
   },
-  {
-    "zbirenbaum/copilot.lua",
-    cmd = "Copilot",
-    event = "InsertEnter",
-    enabled = false,
-    config = function()
-      local cp = require("copilot")
-      cp.setup({
-        panel = { enabled = false },
-        suggestion = {
-          enabled = true,
-          auto_trigger = true,
-          hide_during_completion = false,
-          debounce = 75,
-          keymap = {
-            accept = "<C-l>",
-            accept_word = false,
-            accept_line = false,
-            next = false,
-            prev = false,
-            dismiss = "<C-h>",
-          },
-        },
-        filetypes = {
-          yaml = false,
-          markdown = false,
-          help = false,
-          gitcommit = false,
-          gitrebase = false,
-          hgcommit = false,
-          svn = false,
-          cvs = false,
-          ["."] = false,
-        },
-      })
-    end,
-  },
-  { -- copilot
-    "github/copilot.vim",
-    enabled = false,
-    config = function()
-      vim.g.copilot_workspace_folders = { "~/Documents/Development", "~/Documents/Sandbox", "~/dev", "~/tmp" }
-      vim.g.copilot_assume_mapped = true
-      vim.g.copilot_no_tab_map = true
-      vim.g.copilot_filetypes = {
-        ["TelescopePrompt"] = false,
-      }
-      vim.keymap.set("i", "<C-l>", 'copilot#Accept("\\<CR>")', { expr = true, replace_keycodes = false })
-    end,
-  },
   { -- install lsp servers
     "williamboman/mason.nvim",
     opts = {
