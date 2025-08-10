@@ -44,22 +44,30 @@ return {
     opts = { style = "ascii" },
     config = function(_, options)
       local icons = require("mini.icons")
-      local hl_groups = {
-        "MiniIconsAzure",
-        "MiniIconsBlue",
-        "MiniIconsCyan",
-        "MiniIconsGreen",
-        "MiniIconsGrey",
-        "MiniIconsOrange",
-        "MiniIconsPurple",
-        "MiniIconsRed",
-        "MiniIconsYellow",
-      }
       icons.setup(options)
       icons.mock_nvim_web_devicons()
-      for _, group in ipairs(hl_groups) do
-        vim.api.nvim_set_hl(0, group, { fg = colors.gui05 })
-      end
+      
+      -- Set highlight groups after highlights are loaded
+      vim.api.nvim_create_autocmd("User", {
+        pattern = "VeryLazy",
+        callback = function()
+          local colors = require("config.highlights").colors
+          local hl_groups = {
+            "MiniIconsAzure",
+            "MiniIconsBlue",
+            "MiniIconsCyan",
+            "MiniIconsGreen",
+            "MiniIconsGrey",
+            "MiniIconsOrange",
+            "MiniIconsPurple",
+            "MiniIconsRed",
+            "MiniIconsYellow",
+          }
+          for _, group in ipairs(hl_groups) do
+            vim.api.nvim_set_hl(0, group, { fg = colors.gui05 })
+          end
+        end,
+      })
     end,
   },
   { -- Adds git related signs to the gutter, as well as utilities for managing changes.
@@ -156,7 +164,7 @@ return {
       vim.o.laststatus = vim.g.lualine_laststatus
       ll.setup({
         options = {
-          theme = "onedark",
+          theme = "catppuccin",
           icons_enabled = false,
           component_separators = { left = "", right = "" },
           section_separators = { left = "", right = "" },
@@ -211,8 +219,10 @@ return {
     "akinsho/bufferline.nvim",
     event = "VeryLazy",
     config = function()
-      local bl = require("bufferline")
-      bl.setup({
+      -- Defer setup to ensure highlights are loaded
+      vim.schedule(function()
+        local bl = require("bufferline")
+        bl.setup({
         options = {
           indicator = {
             icon = " ",
@@ -245,14 +255,15 @@ return {
             },
           },
         },
-      })
-      vim.api.nvim_create_autocmd({ "BufAdd", "BufDelete" }, {
-        callback = function()
-          vim.schedule(function()
-            pcall(nvim_bufferline)
-          end)
-        end,
-      })
+        })
+        vim.api.nvim_create_autocmd({ "BufAdd", "BufDelete" }, {
+          callback = function()
+            vim.schedule(function()
+              pcall(nvim_bufferline)
+            end)
+          end,
+        })
+      end)
     end,
   },
   { -- notifications
