@@ -10,9 +10,10 @@ local diagnostics = {
 
 local setup_keymaps = function(client, buffer)
   local Snacks = require("snacks")
+  local keymap = require("utils.keymap")
   local map = function(keys, func, desc, mode)
     mode = mode or "n"
-    vim.keymap.set(mode, keys, func, { buffer = buffer, desc = "LSP: " .. desc })
+    keymap.map(mode, keys, func, { buffer = buffer, desc = "LSP: " .. desc })
   end
   map("gd", function()
     Snacks.picker.lsp_definitions()
