@@ -33,4 +33,5 @@ Use `stylua .` to format all Lua files according to stylua.toml config.
 
 ## TODO
 
+- [ ] extract themes from tinted-theming, make your own onedark instead
 - [ ] multi-cursor?
