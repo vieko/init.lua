@@ -1,17 +1,25 @@
 -- [[ COLORSCHEME ]]
 return {
   {
-    "tinted-theming/tinted-vim",
-    enabled = false,
+    "catppuccin/nvim",
+    name = "catppuccin",
     priority = 1000,
-    lazy = false,
-  },
-  {
-    "brenoprata10/nvim-highlight-colors",
-    enabled = false,
     config = function()
-      require("nvim-highlight-colors").setup({})
+      require("catppuccin").setup({
+        flavour = "mocha",
+        transparent_background = false,
+        integrations = {
+          cmp = true,
+          gitsigns = true,
+          nvimtree = true,
+          treesitter = true,
+          mini = {
+            enabled = true,
+            indentscope_color = "",
+          },
+        },
+      })
+      vim.cmd.colorscheme("catppuccin")
     end,
-    lazy = false,
   },
 }

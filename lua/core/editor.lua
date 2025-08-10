@@ -1,11 +1,8 @@
 -- [[ EDITOR ]]
-local highlight = require("config/highlights")
-local colors = highlight.colors
-local defaults = highlight.defaults
 return {
   { -- git integration
     "tpope/vim-fugitive",
-    lazy = false,
+    cmd = { "Git", "Gstatus", "Gdiff", "Gblame", "Glog", "Gclog" },
   },
   { -- detect tabstops and shiftwidth automatically
     "tpope/vim-sleuth",
