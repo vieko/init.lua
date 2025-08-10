@@ -74,22 +74,6 @@ return {
     "lewis6991/gitsigns.nvim",
     event = "VeryLazy",
     opts = {
-      -- signs = {
-      --   add = { text = "A" },
-      --   change = { text = "M" },
-      --   delete = { text = "D" },
-      --   topdelete = { text = "T" },
-      --   changedelete = { text = "C" },
-      --   untracked = { text = "?" },
-      -- },
-      -- signs_staged = {
-      --   add = { text = "A" },
-      --   change = { text = "M" },
-      --   delete = { text = "D" },
-      --   topdelete = { text = "T" },
-      --   changedelete = { text = "C" },
-      --   untracked = { text = "?" },
-      -- },
       signs = {
         add = { text = "┃" },
         change = { text = "┃" },

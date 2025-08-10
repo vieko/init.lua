@@ -19,11 +19,6 @@ opt.expandtab = true
 opt.exrc = true
 opt.secure = true
 opt.fileencoding = "utf-8"
--- opt.fillchars = { eob = " " }
--- opt.foldmethod = "syntax"
--- opt.foldenable = true
--- opt.foldlevel = 99
--- opt.foldlevelstart = 99
 opt.formatoptions:remove("o")
 opt.foldcolumn = "0"
 opt.guicursor = ""
@@ -41,8 +36,6 @@ opt.listchars = {
   extends = "›",
   precedes = "‹",
   nbsp = "␣",
-  -- eol = "¬",
-  -- trail = ".",
 }
 opt.mouse = "a"
 opt.number = true

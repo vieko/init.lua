@@ -2,12 +2,25 @@ local M = {}
 
 -- === COLOR UTILITIES ===
 local function hex_to_rgb(hex)
-  if not hex or not hex:match("^#?[0-9A-Fa-f]+$") then
-    error("Invalid hex color format")
+  if not hex or type(hex) ~= "string" then
+    vim.notify("hex_to_rgb: Invalid hex input - must be string", vim.log.levels.WARN)
     return 0, 0, 0
   end
+  
+  if not hex:match("^#?[0-9A-Fa-f]+$") then
+    vim.notify("hex_to_rgb: Invalid hex color format: " .. hex, vim.log.levels.WARN)
+    return 0, 0, 0
+  end
+  
   -- Remove # if present
   hex = hex:gsub("#", "")
+  
+  -- Ensure we have at least 6 characters
+  if #hex < 6 then
+    vim.notify("hex_to_rgb: Hex color too short: " .. hex, vim.log.levels.WARN)
+    return 0, 0, 0
+  end
+  
   -- Handle both 6 and 8 character hex (with alpha)
   local r = tonumber(hex:sub(1, 2), 16)
   local g = tonumber(hex:sub(3, 4), 16)

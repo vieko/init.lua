@@ -3,35 +3,6 @@ local function augroup(name)
   return vim.api.nvim_create_augroup("vieko_" .. name, { clear = true })
 end
 
--- vim.api.nvim_create_autocmd("FileType", {
---   pattern = {
---     "json",
---     "jsonc",
---     "js",
---     "jsx",
---     "javascript",
---     "javascriptreact",
---     "ts",
---     "tsx",
---     "typescript",
---     "typescriptreact",
---     "lua",
---     "python",
---     "html",
---     "css",
---     "yaml",
---     "toml",
---     "go",
---   },
---   group = augroup("filetype_folds"),
---   callback = function()
---     vim.opt.foldmethod = "expr" -- Use expression-based folding
---     vim.opt.foldexpr = "v:lua.vim.treesitter.foldexpr()"
---     vim.opt.foldenable = true
---     vim.opt.foldlevel = 99
---     vim.opt.foldlevelstart = 99
---   end,
--- })
 
 -- highlight when yanking (copying) text
 vim.api.nvim_create_autocmd("TextYankPost", {
