@@ -1,14 +1,26 @@
 -- [[ TAILWIND ]]
 
--- Auto-detect Tailwind CSS v4 configuration
-local function find_tailwind_config()
+-- Auto-detect Tailwind CSS configuration (v3 or v4)
+local function find_tailwind_config(root_dir)
   local experimental_config = {}
 
-  -- Find git root or use current working directory
-  local git_root = vim.fn.systemlist("git rev-parse --show-toplevel")[1]
-  local root_dir = (git_root and vim.v.shell_error == 0) and git_root or vim.fn.getcwd()
+  -- Check for Tailwind v3 (tailwind.config.{js,ts,cjs,mjs})
+  local v3_config_patterns = {
+    "tailwind.config.js",
+    "tailwind.config.ts",
+    "tailwind.config.cjs",
+    "tailwind.config.mjs",
+  }
 
-  -- Common locations for Tailwind v4 CSS entrypoints in monorepos
+  for _, config_file in ipairs(v3_config_patterns) do
+    local config_path = root_dir .. "/" .. config_file
+    if vim.fn.filereadable(config_path) == 1 then
+      -- v3 detected - return nil to use default behavior
+      return nil
+    end
+  end
+
+  -- Check for Tailwind v4 (@import "tailwindcss" in CSS files)
   local possible_css_paths = {
     "packages/ui/src/styles/globals.css",
     "src/styles/globals.css",
@@ -16,12 +28,11 @@ local function find_tailwind_config()
     "styles/globals.css",
   }
 
-  -- Find the CSS entrypoint
   local css_file = nil
   for _, path in ipairs(possible_css_paths) do
     local full_path = root_dir .. "/" .. path
     if vim.fn.filereadable(full_path) == 1 then
-      -- Check if it contains @import "tailwindcss"
+      -- Check if it contains @import "tailwindcss" (v4 indicator)
       local content = vim.fn.readfile(full_path, "", 10) -- Read first 10 lines
       for _, line in ipairs(content) do
         if line:match('@import%s+"tailwindcss"') then
@@ -33,19 +44,19 @@ local function find_tailwind_config()
     end
   end
 
-  -- If found, set up patterns for monorepo structure
+  -- If v4 detected, set up patterns for monorepo structure
   if css_file then
     experimental_config[css_file] = {
       root_dir .. "/apps/**/src/**/*",
       root_dir .. "/packages/**/src/**/*",
       root_dir .. "/src/**/*", -- Fallback for non-monorepo
     }
+    return experimental_config
   end
 
-  return experimental_config
+  -- No v3 or v4 detected - return empty config
+  return {}
 end
-
-local experimental_config = find_tailwind_config()
 
 return {
   {
@@ -73,33 +84,40 @@ return {
 
       -- Use custom setup function to ensure our settings are applied
       opts.setup.tailwindcss = function(_, server_opts)
+        -- Detect Tailwind version based on root_dir
+        local root_dir = server_opts.root_dir
+        if type(root_dir) == "function" then
+          -- root_dir is a function, call it with current buffer path
+          root_dir = root_dir(vim.api.nvim_buf_get_name(0))
+        end
+
+        local experimental_config = find_tailwind_config(root_dir or vim.fn.getcwd())
+
+        -- Build settings based on detected version
+        local tailwind_settings = {
+          validate = true,
+          hovers = true,
+          suggestions = true,
+          colorDecorators = true,
+        }
+
+        -- Add experimental.configFile for v4, or if v3 (nil), don't add it
+        if experimental_config then
+          tailwind_settings.experimental = {
+            configFile = experimental_config,
+          }
+        end
+
         -- Deep merge our settings with server_opts
         server_opts.settings = server_opts.settings or {}
         server_opts.settings.tailwindCSS = vim.tbl_deep_extend("force",
           server_opts.settings.tailwindCSS or {},
-          {
-            validate = true,
-            hovers = true,
-            suggestions = true,
-            colorDecorators = true,
-            experimental = {
-              configFile = experimental_config,
-            },
-          }
+          tailwind_settings
         )
 
-        -- Setup the server with our modified settings using new nvim 0.11+ API
-        if vim.fn.has("nvim-0.11") == 1 then
-          -- Use new vim.lsp.config API (nvim 0.11+)
-          vim.lsp.config.tailwindcss = server_opts
-          vim.lsp.enable("tailwindcss")
-        else
-          -- Fallback to old lspconfig API
-          require("lspconfig").tailwindcss.setup(server_opts)
-        end
-
-        -- Return true to skip default setup
-        return true
+        -- Let lspconfig handle the setup with our merged settings
+        -- lspconfig will use the appropriate API based on nvim version
+        return false
       end
 
       return opts
