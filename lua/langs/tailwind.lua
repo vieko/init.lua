@@ -1,5 +1,9 @@
 -- [[ TAILWIND ]]
 
+-- Suppress lspconfig deprecation warning for nvim 0.11+
+-- The old API still works fine, we'll migrate when lspconfig v3 is released
+vim.deprecate = function() end
+
 -- Auto-detect Tailwind CSS configuration (v3 or v4)
 local function find_tailwind_config(root_dir)
   local experimental_config = {}
@@ -116,7 +120,7 @@ return {
         )
 
         -- Let lspconfig handle the setup with our merged settings
-        -- lspconfig will use the appropriate API based on nvim version
+        -- Note: lspconfig will show deprecation warning in nvim 0.11+ but functionality works fine
         return false
       end
 
