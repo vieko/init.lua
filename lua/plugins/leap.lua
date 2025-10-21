@@ -1,7 +1,7 @@
 return {
   {
     "ggandor/leap.nvim",
-    enabled = true,
+    enabled = false, -- Disabled in favor of flash.nvim
     keys = {
       { "s", mode = { "n", "x", "o" }, desc = "Leap Forward to" },
       { "S", mode = { "n", "x", "o" }, desc = "Leap Backward to" },

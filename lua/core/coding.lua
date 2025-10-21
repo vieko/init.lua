@@ -69,21 +69,6 @@ return {
       })
     end,
   },
-  { -- install lsp servers
-    "williamboman/mason.nvim",
-    opts = {
-      ensure_installed = {
-        "stylua",
-        "prettier",
-        "prettierd",
-        "codespell",
-        "misspell",
-        "cspell",
-        "markdownlint",
-        "rustywind",
-      },
-    },
-  },
   { -- better text-objects
     "echasnovski/mini.ai",
     event = { "BufReadPost", "BufNewFile" },

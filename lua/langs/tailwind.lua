@@ -1,105 +1,108 @@
 -- [[ TAILWIND ]]
+
+-- Auto-detect Tailwind CSS v4 configuration
+local function find_tailwind_config()
+  local experimental_config = {}
+
+  -- Find git root or use current working directory
+  local git_root = vim.fn.systemlist("git rev-parse --show-toplevel")[1]
+  local root_dir = (git_root and vim.v.shell_error == 0) and git_root or vim.fn.getcwd()
+
+  -- Common locations for Tailwind v4 CSS entrypoints in monorepos
+  local possible_css_paths = {
+    "packages/ui/src/styles/globals.css",
+    "src/styles/globals.css",
+    "app/globals.css",
+    "styles/globals.css",
+  }
+
+  -- Find the CSS entrypoint
+  local css_file = nil
+  for _, path in ipairs(possible_css_paths) do
+    local full_path = root_dir .. "/" .. path
+    if vim.fn.filereadable(full_path) == 1 then
+      -- Check if it contains @import "tailwindcss"
+      local content = vim.fn.readfile(full_path, "", 10) -- Read first 10 lines
+      for _, line in ipairs(content) do
+        if line:match('@import%s+"tailwindcss"') then
+          css_file = full_path
+          break
+        end
+      end
+      if css_file then break end
+    end
+  end
+
+  -- If found, set up patterns for monorepo structure
+  if css_file then
+    experimental_config[css_file] = {
+      root_dir .. "/apps/**/src/**/*",
+      root_dir .. "/packages/**/src/**/*",
+      root_dir .. "/src/**/*", -- Fallback for non-monorepo
+    }
+  end
+
+  return experimental_config
+end
+
+local experimental_config = find_tailwind_config()
+
 return {
   {
     "neovim/nvim-lspconfig",
-    opts = {
-      servers = {
-        tailwindcss = {
-          filetypes_exclude = { "markdown" },
-          filetypes_include = {},
-        },
-      },
-      setup = {
-        tailwindcss = function(_, opts)
-          local tw = require("lspconfig.configs.tailwindcss")
-          opts.filetypes = opts.filetypes or {}
+    opts = function(_, opts)
+      -- Extend the existing opts with tailwind configuration
+      opts.servers = opts.servers or {}
+      opts.setup = opts.setup or {}
 
-          vim.list_extend(opts.filetypes, tw.default_config.filetypes)
-
-          --- @param ft string
-          opts.filetypes = vim.tbl_filter(function(ft)
-            return not vim.tbl_contains(opts.filetypes_exclude or {}, ft)
-          end, opts.filetypes)
-
-          vim.list_extend(opts.filetypes, opts.filetypes_include or {})
-
-          -- Project-specific tailwind CSS entrypoint configurations
-          -- Map: { [project_path]: { css_file: string, patterns: string[] } }
-          local project_configs = {
-            ["/home/vieko/dev/mothership"] = {
-              css_file = "/home/vieko/dev/mothership/packages/ui/src/styles/globals.css",
-              patterns = {
-                "/home/vieko/dev/mothership/apps/influencer/**/*",
-                "/home/vieko/dev/mothership/apps/website/**/*",
-                "/home/vieko/dev/mothership/packages/ui/**/*",
-              },
+      -- Configure tailwindcss server settings
+      opts.servers.tailwindcss = {
+        mason = false,  -- Use globally installed server, not Mason
+        settings = {
+          tailwindCSS = {
+            validate = true,
+            hovers = true,
+            suggestions = true,
+            colorDecorators = true,
+            experimental = {
+              configFile = experimental_config,
             },
-            -- Add more projects as needed
+          },
+        },
+      }
+
+      -- Use custom setup function to ensure our settings are applied
+      opts.setup.tailwindcss = function(_, server_opts)
+        -- Deep merge our settings with server_opts
+        server_opts.settings = server_opts.settings or {}
+        server_opts.settings.tailwindCSS = vim.tbl_deep_extend("force",
+          server_opts.settings.tailwindCSS or {},
+          {
+            validate = true,
+            hovers = true,
+            suggestions = true,
+            colorDecorators = true,
+            experimental = {
+              configFile = experimental_config,
+            },
           }
+        )
 
-          -- Get the project root directory
-          local current_dir = vim.fn.getcwd()
-          local project_root = nil
+        -- Setup the server with our modified settings using new nvim 0.11+ API
+        if vim.fn.has("nvim-0.11") == 1 then
+          -- Use new vim.lsp.config API (nvim 0.11+)
+          vim.lsp.config.tailwindcss = server_opts
+          vim.lsp.enable("tailwindcss")
+        else
+          -- Fallback to old lspconfig API
+          require("lspconfig").tailwindcss.setup(server_opts)
+        end
 
-          -- Find which project config applies
-          for project_path, _ in pairs(project_configs) do
-            if vim.startswith(current_dir, project_path) then
-              project_root = project_path
-              break
-            end
-          end
+        -- Return true to skip default setup
+        return true
+      end
 
-          if project_root then
-            -- Set up the configFile object according to Tailwind CSS v4 format
-            local config = project_configs[project_root]
-
-            -- Initialize settings structure
-            opts.settings = opts.settings or {}
-            opts.settings.tailwindCSS = opts.settings.tailwindCSS or {}
-            opts.settings.tailwindCSS.experimental = opts.settings.tailwindCSS.experimental or {}
-
-            -- Create the configFile object: { [css_file_path]: patterns_it_applies_to }
-            local configFile = {}
-            configFile[config.css_file] = config.patterns
-
-            -- Set the configFile in the settings
-            opts.settings.tailwindCSS.experimental.configFile = configFile
-
-            -- Notify for debugging with full configuration
-            vim.notify(
-              "Tailwind CSS configured for project: "
-                .. project_root
-                .. "\nUsing CSS file: "
-                .. config.css_file
-                .. "\nFull config: "
-                .. vim.inspect(opts.settings.tailwindCSS.experimental.configFile),
-              vim.log.levels.INFO
-            )
-          else
-            -- Default configuration if no project-specific config exists
-            opts.settings = opts.settings or {}
-            opts.settings.tailwindCSS = opts.settings.tailwindCSS or {}
-            opts.settings.tailwindCSS.experimental = opts.settings.tailwindCSS.experimental or {}
-
-            -- Look for globals.css in current directory
-            local globals_css = vim.fn.getcwd() .. "/globals.css"
-            if vim.fn.filereadable(globals_css) == 1 then
-              -- If globals.css exists in current directory, use it
-              local configFile = {}
-              configFile[globals_css] = { vim.fn.getcwd() .. "/**/*" }
-              opts.settings.tailwindCSS.experimental.configFile = configFile
-
-              vim.notify(
-                "Tailwind CSS using globals.css in current directory\nFull config: "
-                  .. vim.inspect(opts.settings.tailwindCSS.experimental.configFile),
-                vim.log.levels.INFO
-              )
-            else
-              vim.notify("No project-specific Tailwind CSS config found.", vim.log.levels.WARN)
-            end
-          end
-        end,
-      },
-    },
+      return opts
+    end,
   },
 }

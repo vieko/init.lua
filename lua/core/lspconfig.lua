@@ -221,7 +221,17 @@ return {
     opts_extend = { "ensure_installed" },
     opts = {
       ensure_installed = {
+        -- Formatters
         "stylua",
+        "prettier",
+        "prettierd",
+        "rustywind",
+        -- Linters & Spell checkers
+        "codespell",
+        "misspell",
+        "cspell",
+        "markdownlint",
+        -- LSP servers
         "eslint-lsp",
         "tailwindcss-language-server",
         "golangci-lint",

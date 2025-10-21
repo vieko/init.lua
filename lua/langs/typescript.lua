@@ -99,17 +99,15 @@ return {
           },
         },
       },
-      -- Enable this to enable the builtin LSP inlay hints on Neovim >= 0.10.0
-      -- Be aware that you also will need to properly configure your LSP server to
-      -- provide the inlay hints.
+      -- Enable builtin LSP inlay hints on Neovim >= 0.10.0
+      -- Shows inline type hints, parameter names, etc.
       inlay_hints = {
-        enabled = false,
+        enabled = true,
       },
-      -- Enable this to enable the builtin LSP code lenses on Neovim >= 0.10.0
-      -- Be aware that you also will need to properly configure your LSP server to
-      -- provide the code lenses.
+      -- Enable builtin LSP code lenses on Neovim >= 0.10.0
+      -- Shows actionable code actions inline (e.g., "X references", "Run tests")
       codelens = {
-        enabled = false, -- Run `lua vim.lsp.codelens.refresh({ bufnr = 0 })` for refreshing code lens
+        enabled = true,
       },
       setup = {
         ts_ls = function(_)

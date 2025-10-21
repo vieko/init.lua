@@ -33,7 +33,7 @@ return {
       },
       setup = {
         ruff = function(_, opts)
-          require("utils.lsp").register_keymaps("taplo", opts.keys, "Ruff")
+          require("utils.lsp").register_keymaps("ruff", opts.keys, "Ruff")
           require("utils.lsp").on_attach(function(client, _)
             -- Disable hover in favor of Pyright
             client.server_capabilities.hoverProvider = false
