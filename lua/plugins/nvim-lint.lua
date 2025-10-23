@@ -6,9 +6,9 @@ return {
     opts = {
       ensure_installed = {
         "eslint_d",
-        "oxlint",
         "shellcheck",
-        "golangci-lint", -- add golangci-lint to mason
+        -- "oxlint", -- Disabled: not used, eslint_d is preferred
+        -- "golangci-lint", -- Disabled: Go not installed
       },
     },
   },
@@ -18,87 +18,14 @@ return {
     opts = {
       linters_by_ft = {
         sh = { "shellcheck" },
-        javascript = { "eslint_d" }, -- oxlint
-        typescript = { "eslint_d" }, -- oxlint
-        javascriptreact = { "eslint_d" }, -- oxlint
-        typescriptreact = { "eslint_d" }, -- oxlint
-        go = { "golangcilint" }, -- register for Go files
+        javascript = { "eslint_d" },
+        typescript = { "eslint_d" },
+        javascriptreact = { "eslint_d" },
+        typescriptreact = { "eslint_d" },
+        -- go = { "golangcilint" }, -- Disabled: Go not installed
       },
       linters = {
-        -- eslint_d = {
-        --   cmd = "eslint_d",
-        --   args = {
-        --     "--no-warn-ignored",
-        --     "--format",
-        --     "json",
-        --     "--stdin",
-        --     "--stdin-filename",
-        --     function()
-        --       return vim.api.nvim_buf_get_name(0)
-        --     end,
-        --   },
-        -- },
-        -- Define a custom golangcilint linter that points to the correct executable
-        golangcilint = {
-          cmd = "golangci-lint", -- Point to the executable with hyphen
-          args = {
-            "run",
-            "--out-format",
-            "json",
-            "--issues-exit-code=0",
-            "--show-stats=false",
-            "--print-issued-lines=false",
-            "--print-linter-name=false",
-            function()
-              return vim.fn.fnamemodify(vim.api.nvim_buf_get_name(0), ":h")
-            end,
-          },
-          stdin = false,
-          append_fname = false,
-          stream = "stdout",
-          ignore_exitcode = true,
-          parser = function(output, bufnr)
-            if output == "" then
-              return {}
-            end
-            local decoded = vim.json.decode(output)
-            if decoded["Issues"] == nil or type(decoded["Issues"]) == "userdata" then
-              return {}
-            end
-            local diagnostics = {}
-            for _, item in ipairs(decoded["Issues"]) do
-              local curfile = vim.api.nvim_buf_get_name(bufnr)
-              local curfile_abs = vim.fn.fnamemodify(curfile, ":p")
-
-              local lintedfile = vim.fn.getcwd() .. "/" .. item.Pos.Filename
-              local lintedfile_abs = vim.fn.fnamemodify(lintedfile, ":p")
-
-              if curfile_abs == lintedfile_abs then
-                -- only publish if those are the current file diagnostics
-                local severity = vim.diagnostic.severity.WARN
-                if item.Severity == "error" then
-                  severity = vim.diagnostic.severity.ERROR
-                elseif item.Severity == "warning" then
-                  severity = vim.diagnostic.severity.WARN
-                elseif item.Severity == "info" then
-                  severity = vim.diagnostic.severity.INFO
-                elseif item.Severity == "hint" then
-                  severity = vim.diagnostic.severity.HINT
-                end
-                table.insert(diagnostics, {
-                  lnum = item.Pos.Line > 0 and item.Pos.Line - 1 or 0,
-                  col = item.Pos.Column > 0 and item.Pos.Column - 1 or 0,
-                  end_lnum = item.Pos.Line > 0 and item.Pos.Line - 1 or 0,
-                  end_col = item.Pos.Column > 0 and item.Pos.Column - 1 or 0,
-                  severity = severity,
-                  source = item.FromLinter,
-                  message = item.Text,
-                })
-              end
-            end
-            return diagnostics
-          end,
-        },
+        -- Custom linter definitions can go here
       },
     },
     config = function(_, opts)

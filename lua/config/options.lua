@@ -93,18 +93,8 @@ opt.foldmethod = "expr"
 opt.foldtext = "v:lua.require'utils.ui'.foldtext()"
 
 -- [[ UTILITIES ]]
-vim.g.clipboard = {
-  name = "wl-clipboard",
-  copy = {
-    ["+"] = "wl-copy",
-    ["*"] = "wl-copy",
-  },
-  paste = {
-    ["+"] = "wl-paste --no-newline",
-    ["*"] = "wl-paste --no-newline",
-  },
-  cache_enabled = 0,
-}
+-- Clipboard: Let neovim auto-detect (pbcopy on macOS, wl-copy on Wayland, xclip on X11)
+-- No manual config needed - neovim handles it perfectly
 
 -- [[ NETRW ]]
 vim.g.netrw_keepdir = 0

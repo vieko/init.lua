@@ -29,7 +29,14 @@ local spec = {
   { import = "plugins.nvim-lint" },
   { import = "plugins.snacks" },
   { import = "plugins.flash" },
-  { import = "langs" },
+  -- Language-specific configurations
+  { import = "langs.lua" },
+  { import = "langs.typescript" },
+  { import = "langs.json" },
+  { import = "langs.python" },
+  { import = "langs.tailwind" },
+  -- { import = "langs.go" }, -- Disabled: Go not installed
+  -- { import = "langs.rust" }, -- Disabled: Rust not needed
 }
 
 require("lazy").setup({

@@ -24,7 +24,7 @@ return {
         "bash",
         "c",
         "diff",
-        "go",
+        -- "go", -- Disabled: Go not installed
         "html",
         "http",
         "javascript",
@@ -40,8 +40,8 @@ return {
         "python",
         "query",
         "regex",
-        "rust",
-        "toml",
+        -- "rust", -- Disabled: Rust not needed
+        -- "toml", -- Disabled: only used for Rust Cargo.toml
         "tsx",
         "typescript",
         "vim",

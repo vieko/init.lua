@@ -35,3 +35,4 @@ Use `stylua .` to format all Lua files according to stylua.toml config.
 
 - [ ] extract themes from tinted-theming, make your own onedark instead
 - [ ] multi-cursor?
+- [ ] test Biome formatter (install `npm install -g @biomejs/biome` and add biome.json to projects)
