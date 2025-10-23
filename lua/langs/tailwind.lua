@@ -28,6 +28,7 @@ local function find_tailwind_config(root_dir)
   local possible_css_paths = {
     "packages/ui/src/styles/globals.css",
     "src/styles/globals.css",
+    "src/app/globals.css",  -- Next.js 13+ app directory
     "app/globals.css",
     "styles/globals.css",
   }
@@ -72,7 +73,7 @@ return {
 
       -- Configure tailwindcss server settings
       opts.servers.tailwindcss = {
-        mason = false,  -- Use globally installed server, not Mason
+        mason = true,  -- Use Mason-installed server. Set to false to use global installation
         settings = {
           tailwindCSS = {
             validate = true,
