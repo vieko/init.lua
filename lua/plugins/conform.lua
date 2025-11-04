@@ -70,6 +70,13 @@ return {
         },
         prettier = {
           condition = function()
+            -- Always allow prettier for markdown files (biome doesn't format markdown)
+            local ft = vim.bo.filetype
+            if ft == "markdown" or ft == "markdown.mdx" then
+              return true
+            end
+
+            -- For other file types, check biome config
             local path = Lsp.biome_config_path()
             local is_nvim = path and string.match(path, "nvim")
             if path and not is_nvim then
