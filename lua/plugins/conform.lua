@@ -35,6 +35,8 @@ return {
         yaml = { "prettier", "dprint", stop_after_first = true },
         ["markdown"] = { "prettier", "dprint", stop_after_first = true },
         ["markdown.mdx"] = { "prettier", "dprint", stop_after_first = true },
+        ["css"] = { "prettier", "biome", stop_after_first = true },
+        ["scss"] = { "prettier", "biome", stop_after_first = true },
         ["javascript"] = { "prettier", "biome", "dprint", stop_after_first = true },
         ["javascriptreact"] = function(bufnr)
           return { "rustywind", first(bufnr, "prettier", "biome", "dprint") }
