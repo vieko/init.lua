@@ -115,17 +115,23 @@ return {
           },
         },
         servers = {
+          -- cssls disabled in favor of Tailwind LSP for CSS file support.
+          -- Tailwind LSP natively handles CSS files (including postcss, sass, scss)
+          -- and understands modern CSS syntax with custom at-rules (@tailwind, @apply,
+          -- @layer, @theme, @source, @plugin, etc.) without generating false warnings.
+          -- cssls does not properly respect unknownAtRules configuration despite
+          -- multiple attempts to configure it. For projects needing traditional CSS
+          -- validation without Tailwind, re-enable cssls or use stylelint-lsp.
           cssls = {
-            settings = {
-              css = {
-                lint = {
-                  unknownAtRules = "ignore",
-                },
-              },
-            },
+            enabled = false,
           },
         },
-        setup = {},
+        setup = {
+          -- Skip cssls setup entirely - return true to prevent mason-lspconfig from auto-configuring it
+          cssls = function()
+            return true
+          end,
+        },
       }
     end,
     ---@param opts PluginLspOpts
