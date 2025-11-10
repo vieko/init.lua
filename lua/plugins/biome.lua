@@ -14,11 +14,10 @@ return {
     opts = {
       servers = {
         biome = {
-          root_dir = function()
-            if Lsp.biome_config_exists() then
-              return Lsp.biome_config_path()
-            end
-            return vim.fn.stdpath("config")
+          -- Only start biome LSP if biome.json exists in project
+          -- Let lspconfig auto-detect root_dir via package.json or biome.json
+          autostart = function()
+            return Lsp.biome_config_exists()
           end,
         },
       },

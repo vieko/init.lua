@@ -21,6 +21,7 @@ local M = {
   deno_config_exist = config.deno_config_exist,
   spectral_config_path = config.spectral_config_path,
   eslint_config_exists = config.eslint_config_exists,
+  prettier_config_exists = config.prettier_config_exists,
   
   -- From client
   start_lsp_client_by_name = client.start_lsp_client_by_name,

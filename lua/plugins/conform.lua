@@ -50,12 +50,9 @@ return {
       formatters = {
         biome = {
           condition = function()
+            -- Only use biome if config exists and is NOT in nvim config dir
             local path = Lsp.biome_config_path()
-            local is_nvim = path and string.match(path, "nvim")
-            if path and not is_nvim then
-              return true
-            end
-            return false
+            return path ~= nil and not path:match("nvim")
           end,
         },
         deno_fmt = {
@@ -70,30 +67,43 @@ return {
         },
         prettier = {
           condition = function()
-            -- Always allow prettier for markdown files (biome doesn't format markdown)
             local ft = vim.bo.filetype
+
+            -- Always allow prettier for markdown (biome doesn't support markdown)
             if ft == "markdown" or ft == "markdown.mdx" then
-              return true
+              return Lsp.prettier_config_exists()
             end
 
-            -- For other file types, check biome config
-            local path = Lsp.biome_config_path()
-            local is_nvim = path and string.match(path, "nvim")
-            if path and not is_nvim then
+            -- For JS/TS files: prefer biome if available, otherwise check for prettier config
+            local biome_path = Lsp.biome_config_path()
+            local has_biome = biome_path ~= nil and not biome_path:match("nvim")
+
+            -- Don't use prettier if biome is configured for this project
+            if has_biome then
               return false
             end
-            return true
+
+            -- Use prettier if it's explicitly configured
+            return Lsp.prettier_config_exists()
           end,
         },
         prettierd = {
           condition = function()
-            local path = Lsp.biome_config_path()
-            local is_nvim = path and string.match(path, "nvim")
-            if path and not is_nvim then
+            -- Same logic as prettier
+            local ft = vim.bo.filetype
+
+            if ft == "markdown" or ft == "markdown.mdx" then
+              return Lsp.prettier_config_exists()
+            end
+
+            local biome_path = Lsp.biome_config_path()
+            local has_biome = biome_path ~= nil and not biome_path:match("nvim")
+
+            if has_biome then
               return false
             end
 
-            return true
+            return Lsp.prettier_config_exists()
           end,
         },
       },

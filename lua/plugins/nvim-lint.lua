@@ -5,8 +5,8 @@ return {
     optional = true,
     opts = {
       ensure_installed = {
-        "eslint_d",
         "shellcheck",
+        -- "eslint_d", -- Removed: ESLint LSP handles this, avoid redundancy
         -- "oxlint", -- Disabled: not used, eslint_d is preferred
         -- "golangci-lint", -- Disabled: Go not installed
       },
@@ -18,10 +18,8 @@ return {
     opts = {
       linters_by_ft = {
         sh = { "shellcheck" },
-        javascript = { "eslint_d" },
-        typescript = { "eslint_d" },
-        javascriptreact = { "eslint_d" },
-        typescriptreact = { "eslint_d" },
+        -- ESLint removed: ESLint LSP (plugins/eslint.lua) handles JS/TS linting
+        -- Keeping nvim-lint for other languages (shellcheck, etc.)
         -- go = { "golangcilint" }, -- Disabled: Go not installed
       },
       linters = {
