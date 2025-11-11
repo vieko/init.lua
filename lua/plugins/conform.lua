@@ -20,7 +20,7 @@ return {
   -- Setup config for formatter
   {
     "stevearc/conform.nvim",
-    event = { "BufWritePre" },
+    event = { "BufReadPre", "BufNewFile" },
     cmd = { "ConformInfo" },
     ---@type conform.setupOpts
     opts = {
@@ -66,6 +66,8 @@ return {
           end,
         },
         prettier = {
+          -- Don't respect .gitignore when formatting (use empty ignore path)
+          prepend_args = { "--ignore-path", "/dev/null" },
           condition = function()
             local ft = vim.bo.filetype
 
