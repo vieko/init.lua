@@ -32,6 +32,12 @@ return {
             },
           },
           win = {
+            input = {
+              keys = {
+                ["<C-g>"] = { "toggle_ignored", mode = { "n", "i" } }, -- Ctrl+g for gitignored (Ctrl+i = Tab in terminals)
+                ["<C-h>"] = { "toggle_hidden", mode = { "n", "i" } },  -- Ctrl+h for hidden
+              },
+            },
             preview = {
               wo = {
                 signcolumn = "yes:2",
