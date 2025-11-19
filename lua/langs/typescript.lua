@@ -28,7 +28,19 @@ return {
     opts = {
       servers = {
         ts_ls = {
-          root_dir = require("lspconfig").util.root_pattern("package.json", "tsconfig.json"),
+          root_dir = function(fname)
+            -- Use vim.fs.find directly to avoid the incompatibility issue
+            local root_files = { "package.json", "tsconfig.json" }
+            local paths = vim.fs.find(root_files, {
+              path = fname,
+              upward = true,
+              stop = vim.uv.os_homedir(),
+            })
+            if #paths > 0 then
+              return vim.fs.dirname(paths[1])
+            end
+            return nil
+          end,
           single_file_support = false,
           handlers = {
             -- format error code with better error message
@@ -110,12 +122,15 @@ return {
         enabled = true,
       },
       setup = {
-        ts_ls = function(_)
+        ts_ls = function(_, opts)
           Lsp.on_attach(function(client, bufnr)
             if client.name == "ts_ls" then
               require("twoslash-queries").attach(client, bufnr)
             end
           end)
+          -- Manually setup ts_ls with our corrected config
+          require("lspconfig").ts_ls.setup(opts)
+          return true -- Skip default setup
         end,
       },
     },
