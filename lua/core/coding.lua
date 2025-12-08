@@ -50,22 +50,28 @@ return {
       })
     end,
   },
-  { -- supermaven
-    "supermaven-inc/supermaven-nvim",
+  { -- copilot
+    "zbirenbaum/copilot.lua",
     event = "InsertEnter",
     enabled = true,
     config = function()
-      local sm = require("supermaven-nvim")
-      sm.setup({
-        keymaps = {
-          accept_suggestion = "<C-l>",
-          clear_suggestion = "<C-h>",
+      require("copilot").setup({
+        panel = { enabled = false },
+        suggestion = {
+          enabled = true,
+          auto_trigger = true,
+          keymap = {
+            accept = "<C-l>",
+            dismiss = "<C-h>",
+            next = "<C-j>",
+            prev = "<C-k>",
+          },
         },
-        color = {
-          suggestion_color = "#5a6a87",
+        filetypes = {
+          bigfile = false,
+          snacks_input = false,
+          snacks_notif = false,
         },
-        disable_inline_completion = false,
-        ignore_filetypes = { "bigfile", "snacks_input", "snacks_notif" },
       })
     end,
   },

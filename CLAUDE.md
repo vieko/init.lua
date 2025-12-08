@@ -93,3 +93,33 @@ Use condition functions in formatters/LSP configs to check for project-specific 
 - **Completion**: nvim-cmp with LSP, buffer, and path sources
 - **Picker**: Snacks picker for LSP navigation (definitions, references, symbols)
 - **Auto-pairs**: mini.pairs for bracket/quote completion
+
+## Sessions Pattern (Optional)
+
+If you've set up the Sessions Directory Pattern (`npx create-sessions-dir`):
+
+- `/start-session` - Read context, fetch GitHub/Linear issues
+- `/end-session` - Update context, detect merged PRs, auto-archive
+- `/plan` - Create structured implementation plans
+- `/document` - Topic-specific documentation with sub-agents
+- `/change-git-strategy` - Change git strategy for .sessions/
+
+Learn more: https://vieko.dev/sessions
+
+## External Tools (Optional)
+
+**For GitHub integration:**
+```bash
+gh auth login    # Required for PR/issue fetching
+```
+
+**For Linear integration:**
+```bash
+npm install -g linearis
+echo "your-api-token" > ~/.linear_api_token
+# Or: export LINEAR_API_TOKEN=your-token
+```
+
+Get token: Linear Settings → Security & Access → Personal API keys
+
+Commands will gracefully handle missing tools and prompt for manual input.
