@@ -1,25 +1,29 @@
 -- [[ TREESITTER ]]
+--
+-- Uses nvim-treesitter `main` branch (the legacy `master` branch is frozen and
+-- broken against Neovim 0.12+; `Query:iter_matches` API changed and the old
+-- plugin still passes the removed `{ all = false }` option).
+--
+-- `main` is a parser/query installer only — no module system. Highlight,
+-- indent, and folds are wired up via the autocmd below using the built-in
+-- `vim.treesitter` APIs. `auto_install` parity is provided by the FileType
+-- handler installing missing parsers on demand.
+--
+-- Textobjects + incremental_selection from the legacy plugin are intentionally
+-- dropped here; `mini.ai` defaults in `core/coding.lua` cover the common
+-- cases (`af`/`if`/`aa`/`ia`).
 return {
-  { -- highlight, edit, and navigate code
+  {
     "nvim-treesitter/nvim-treesitter",
-    version = false,
-    dependencies = {
-      "nvim-treesitter/nvim-treesitter-textobjects",
-    },
-    build = ":TSUpdate",
-    event = { "VeryLazy" },
-    lazy = vim.fn.argc(-1) == 0,
-    init = function(plugin)
-      require("lazy.core.loader").add_to_rtp(plugin)
-      require("nvim-treesitter.query_predicates")
+    branch = "main",
+    lazy = false,
+    build = function()
+      pcall(function()
+        require("nvim-treesitter").update({ async = false })
+      end)
     end,
-    cmd = { "TSUpdateSync", "TSUpdate", "TSInstall" },
     opts_extend = { "ensure_installed" },
     opts = {
-      highlight = { enable = true },
-      indent = { enable = true },
-      fold = { enable = true },
-      auto_install = true,
       ensure_installed = {
         "bash",
         "c",
@@ -30,7 +34,8 @@ return {
         "javascript",
         "jsdoc",
         "json",
-        "jsonc",
+        -- "jsonc" -- unsupported on nvim-treesitter `main`; jsonc filetype
+        --             still highlights via the json parser + comment injections.
         "lua",
         "luadoc",
         "luap",
@@ -49,36 +54,62 @@ return {
         "xml",
         "yaml",
       },
-      incremental_selection = {
-        enable = true,
-        keymaps = {
-          init_selection = "<C-Space>",
-          node_incremental = "<C-Space>",
-          scope_incremental = false,
-          node_decremental = "<BS>",
-        },
-      },
-      textobjects = {
-        move = {
-          enable = true,
-          goto_next_start = { ["]f"] = "@function.outer", ["]c"] = "@class.outer", ["]a"] = "@parameter.inner" },
-          goto_next_end = { ["]F"] = "@function.outer", ["]C"] = "@class.outer", ["]A"] = "@parameter.inner" },
-          goto_previous_start = { ["[f"] = "@function.outer", ["[c"] = "@class.outer", ["[a"] = "@parameter.inner" },
-          goto_previous_end = { ["[F"] = "@function.outer", ["[C"] = "@class.outer", ["[A"] = "@parameter.inner" },
-        },
-        select = {
-          enable = true,
-          keymaps = {
-            ["af"] = "@function.outer",
-            ["if"] = "@function.inner",
-            ["ac"] = "@class.outer",
-            ["ic"] = { query = "@class.inner", desc = "Select inner part of a class region" },
-          },
-        },
-      },
     },
     config = function(_, opts)
-      require("nvim-treesitter.configs").setup(opts)
+      local ts = require("nvim-treesitter")
+      ts.setup()
+
+      -- Install the configured parsers. `install` is idempotent and async;
+      -- it no-ops for parsers already present.
+      if opts.ensure_installed and #opts.ensure_installed > 0 then
+        pcall(ts.install, opts.ensure_installed)
+      end
+
+      -- Per-buffer activation: highlight + indent. Lazy-installs missing
+      -- parsers to mimic the old `auto_install` behavior.
+      local group = vim.api.nvim_create_augroup("vieko.treesitter", { clear = true })
+      vim.api.nvim_create_autocmd("FileType", {
+        group = group,
+        callback = function(ev)
+          local buf = ev.buf
+          local ft = vim.bo[buf].filetype
+          if ft == "" then
+            return
+          end
+
+          local lang = vim.treesitter.language.get_lang(ft) or ft
+
+          -- If the parser isn't available yet, kick off an install and bail.
+          -- The next time this filetype is opened the parser will be ready.
+          if not pcall(vim.treesitter.language.add, lang) then
+            pcall(ts.install, { lang })
+            return
+          end
+
+          -- Enable treesitter highlighting for this buffer.
+          pcall(vim.treesitter.start, buf, lang)
+
+          -- Best-effort treesitter-based indent. nvim-treesitter ships
+          -- indent queries for most ensure_installed languages.
+          pcall(function()
+            vim.bo[buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+          end)
+        end,
+      })
+
+      -- Re-fire FileType for buffers that were already loaded before this
+      -- config ran (e.g., the first file opened from the command line).
+      for _, buf in ipairs(vim.api.nvim_list_bufs()) do
+        if vim.api.nvim_buf_is_loaded(buf) then
+          local ft = vim.bo[buf].filetype
+          if ft ~= "" then
+            vim.api.nvim_exec_autocmds("FileType", {
+              group = group,
+              buffer = buf,
+            })
+          end
+        end
+      end
     end,
   },
   -- Use treesitter to auto close and auto rename html tag
