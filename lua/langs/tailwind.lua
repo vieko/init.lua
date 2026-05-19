@@ -1,9 +1,5 @@
 -- [[ TAILWIND ]]
 
--- Suppress lspconfig deprecation warning for nvim 0.11+
--- The old API still works fine, we'll migrate when lspconfig v3 is released
-vim.deprecate = function() end
-
 -- Auto-detect Tailwind CSS configuration (v3 or v4)
 local function find_tailwind_config(root_dir)
   local experimental_config = {}
@@ -71,7 +67,10 @@ return {
       opts.servers = opts.servers or {}
       opts.setup = opts.setup or {}
 
-      -- Configure tailwindcss server settings
+      -- Configure tailwindcss server settings. The real per-project
+      -- `experimental.configFile` (v3 vs v4 detection) is computed in the
+      -- `opts.setup.tailwindcss` callback below; the base entry here just
+      -- enables the server and its non-project-specific feature toggles.
       opts.servers.tailwindcss = {
         mason = true,  -- Use Mason-installed server. Set to false to use global installation
         settings = {
@@ -80,9 +79,6 @@ return {
             hovers = true,
             suggestions = true,
             colorDecorators = true,
-            experimental = {
-              configFile = experimental_config,
-            },
           },
         },
       }
@@ -120,8 +116,7 @@ return {
           tailwind_settings
         )
 
-        -- Let lspconfig handle the setup with our merged settings
-        -- Note: lspconfig will show deprecation warning in nvim 0.11+ but functionality works fine
+        -- Let lspconfig handle the setup with our merged settings.
         return false
       end
 
