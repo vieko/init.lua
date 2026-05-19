@@ -9,6 +9,12 @@ return {
       {
         "dmmulroy/ts-error-translator.nvim",
         ft = "javascript,typescript,typescriptreact,svelte",
+        -- Modern versions of the plugin auto-attach via `auto_attach = true`
+        -- and override `textDocument/publishDiagnostics` themselves. We just
+        -- need its `setup()` to run, hence `opts = {}`. The old approach of
+        -- overriding the handler manually inside `ts_ls.handlers` used the
+        -- now-removed `translate_diagnostics` API and is gone.
+        opts = {},
       },
       {
         "marilari88/twoslash-queries.nvim",
@@ -42,13 +48,6 @@ return {
             return nil
           end,
           single_file_support = false,
-          handlers = {
-            -- format error code with better error message
-            ["textDocument/publishDiagnostics"] = function(err, result, ctx)
-              require("ts-error-translator").translate_diagnostics(err, result, ctx)
-              vim.lsp.diagnostic.on_publish_diagnostics(err, result, ctx)
-            end,
-          },
           -- inlay hints & code lens, refer to https://github.com/typescript-language-server/typescript-language-server/blob/master/docs/configuration.md/#workspacedidchangeconfiguration
           settings = {
             typescript = {
@@ -111,14 +110,10 @@ return {
           },
         },
       },
-      -- Enable builtin LSP inlay hints on Neovim >= 0.10.0
-      -- Shows inline type hints, parameter names, etc.
+      -- Enable builtin LSP inlay hints on Neovim >= 0.10.0.
+      -- Shows inline type hints, parameter names, etc. (Read by
+      -- `core/lspconfig.lua`; merged into the global LSP opts.)
       inlay_hints = {
-        enabled = true,
-      },
-      -- Enable builtin LSP code lenses on Neovim >= 0.10.0
-      -- Shows actionable code actions inline (e.g., "X references", "Run tests")
-      codelens = {
         enabled = true,
       },
       setup = {

@@ -1,18 +1,14 @@
 -- [[ LSP UTILITIES - MAIN FACADE ]]
 local keymaps = require("utils.lsp.keymaps")
-local config = require("utils.lsp.config") 
+local config = require("utils.lsp.config")
 local client = require("utils.lsp.client")
 local actions = require("utils.lsp.actions")
 local core = require("utils.lsp.core")
 
--- Re-export all functionality from sub-modules
 local M = {
   -- From keymaps
-  kind_filter = keymaps.kind_filter,
-  get_default_keymaps = keymaps.get_default_keymaps,
-  get_kind_filter = keymaps.get_kind_filter,
   register_keymaps = keymaps.register_keymaps,
-  
+
   -- From config
   biome_config_path = config.biome_config_path,
   biome_config_exists = config.biome_config_exists,
@@ -22,15 +18,15 @@ local M = {
   spectral_config_path = config.spectral_config_path,
   eslint_config_exists = config.eslint_config_exists,
   prettier_config_exists = config.prettier_config_exists,
-  
+
   -- From client
   start_lsp_client_by_name = client.start_lsp_client_by_name,
   stop_lsp_client_by_name = client.stop_lsp_client_by_name,
-  
+
   -- From actions
   execute = actions.execute,
   action = actions.action,
-  
+
   -- From core
   get_clients = core.get_clients,
   on_attach = core.on_attach,
