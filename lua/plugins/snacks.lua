@@ -55,7 +55,9 @@ return {
           refresh = 50,
         },
         bufdelete = { enabled = true },
-        notifier = { enabled = true },
+        -- noice.nvim owns `vim.notify` routing (see `core/editor.lua`).
+        -- Enabling both wraps `vim.notify` twice and last-loaded wins.
+        notifier = { enabled = false },
         bigfile = { enabled = true },
         words = { enabled = false },
         util = { enabled = true },
