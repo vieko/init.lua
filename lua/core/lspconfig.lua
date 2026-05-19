@@ -140,14 +140,9 @@ return {
       Lsp.setup()
       Lsp.on_dynamic_capability(setup_keymaps)
 
-      -- diagnostics signs
-      if type(opts.diagnostics.signs) ~= "boolean" then
-        for severity, icon in pairs(opts.diagnostics.signs.text) do
-          local name = vim.diagnostic.severity[severity]:lower():gsub("^%l", string.upper)
-          name = "DiagnosticSign" .. name
-          vim.fn.sign_define(name, { text = icon, texthl = name, numhl = "" })
-        end
-      end
+      -- Diagnostic signs are configured via `vim.diagnostic.config()` below
+      -- (`opts.diagnostics.signs.text`). The legacy `vim.fn.sign_define` loop
+      -- was redundant on Neovim 0.10+ and has been removed.
 
       -- inlay hints
       if opts.inlay_hints.enabled then
@@ -197,14 +192,19 @@ return {
         all_mslp_servers = vim.tbl_keys(require("mason-lspconfig.mappings").get_mason_map().lspconfig_to_package)
       end
 
+      -- mason-lspconfig v2 removed the `handlers` argument from `setup()` and
+      -- defaults to `automatic_enable = true`, which calls `vim.lsp.enable(name)`
+      -- for each installed server. That path does NOT apply our per-server
+      -- `settings`, capabilities, or `opts.setup[name]` hooks, so we always do
+      -- our own configuration here and disable mason-lspconfig's auto-enable.
       local ensure_installed = {} ---@type string[]
       for server, server_opts in pairs(servers) do
         if server_opts then
           server_opts = server_opts == true and {} or server_opts
           if server_opts.enabled ~= false then
-            if server_opts.mason == false or not vim.tbl_contains(all_mslp_servers, server) then
-              setup(server)
-            else
+            setup(server)
+            local is_mason_managed = server_opts.mason ~= false and vim.tbl_contains(all_mslp_servers, server)
+            if is_mason_managed then
               ensure_installed[#ensure_installed + 1] = server
             end
           end
@@ -214,8 +214,8 @@ return {
       if have_mason then
         ---@diagnostic disable-next-line: missing-fields
         mlsp.setup({
-          ensure_installed = vim.tbl_deep_extend("force", ensure_installed, {}),
-          handlers = { setup },
+          ensure_installed = ensure_installed,
+          automatic_enable = false,
         })
       end
     end,
