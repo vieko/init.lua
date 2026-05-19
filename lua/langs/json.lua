@@ -19,10 +19,14 @@ return {
       -- make sure mason installs the server
       servers = {
         jsonls = {
-          -- lazy-load schemastore when needed
-          on_new_config = function(new_config)
-            new_config.settings.json.schemas = new_config.settings.json.schemas or {}
-            vim.list_extend(new_config.settings.json.schemas, require("schemastore").json.schemas())
+          -- lazy-load schemastore when the client initializes.
+          -- (Replaces the lspconfig-specific `on_new_config` hook, which
+          -- isn't part of the `vim.lsp.config` API.)
+          before_init = function(_, config)
+            config.settings = config.settings or {}
+            config.settings.json = config.settings.json or {}
+            config.settings.json.schemas =
+              vim.list_extend(config.settings.json.schemas or {}, require("schemastore").json.schemas())
           end,
           settings = {
             json = {

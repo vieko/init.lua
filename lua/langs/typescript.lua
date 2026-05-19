@@ -34,18 +34,21 @@ return {
     opts = {
       servers = {
         ts_ls = {
-          root_dir = function(fname)
-            -- Use vim.fs.find directly to avoid the incompatibility issue
-            local root_files = { "package.json", "tsconfig.json" }
-            local paths = vim.fs.find(root_files, {
+          -- `vim.lsp.config` root_dir signature is `(bufnr, on_dir)` — invoke
+          -- `on_dir(path)` once a root is found, or return without calling it
+          -- to abort the start. We override lspconfig's default (lock-file
+          -- based) because we want the package root for single-package repos,
+          -- not the monorepo root.
+          root_dir = function(bufnr, on_dir)
+            local fname = vim.api.nvim_buf_get_name(bufnr)
+            local paths = vim.fs.find({ "package.json", "tsconfig.json" }, {
               path = fname,
               upward = true,
               stop = vim.uv.os_homedir(),
             })
             if #paths > 0 then
-              return vim.fs.dirname(paths[1])
+              on_dir(vim.fs.dirname(paths[1]))
             end
-            return nil
           end,
           single_file_support = false,
           -- inlay hints & code lens, refer to https://github.com/typescript-language-server/typescript-language-server/blob/master/docs/configuration.md/#workspacedidchangeconfiguration
@@ -123,9 +126,11 @@ return {
               require("twoslash-queries").attach(client, bufnr)
             end
           end)
-          -- Manually setup ts_ls with our corrected config
-          require("lspconfig").ts_ls.setup(opts)
-          return true -- Skip default setup
+          -- Manually configure ts_ls with our corrected opts, then skip
+          -- the framework's default setup path.
+          vim.lsp.config("ts_ls", opts)
+          vim.lsp.enable("ts_ls")
+          return true
         end,
       },
     },

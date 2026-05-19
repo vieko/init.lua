@@ -169,6 +169,11 @@ return {
         opts.capabilities or {}
       )
 
+      -- Use the modern `vim.lsp.config` + `vim.lsp.enable` flow rather than
+      -- the soon-to-be-removed `require("lspconfig")[name].setup(...)` shim.
+      -- lspconfig still ships per-server defaults (`cmd`, `filetypes`,
+      -- `root_markers`) via runtimepath `lsp/<name>.lua`, which nvim 0.11+
+      -- merges into `vim.lsp.config[name]` automatically.
       local function setup(server)
         local server_opts = vim.tbl_deep_extend("force", {
           capabilities = vim.deepcopy(capabilities),
@@ -183,7 +188,8 @@ return {
             return
           end
         end
-        require("lspconfig")[server].setup(server_opts)
+        vim.lsp.config(server, server_opts)
+        vim.lsp.enable(server)
       end
 
       local have_mason, mlsp = pcall(require, "mason-lspconfig")
