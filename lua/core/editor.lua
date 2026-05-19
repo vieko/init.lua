@@ -355,4 +355,25 @@ return {
       })
     end,
   },
+  { -- Inline color swatches for hex/rgb/hsl/named/Tailwind classes.
+    -- Renders a small "■" virtual symbol after each color so the
+    -- existing text highlighting stays untouched. Picks up Tailwind
+    -- utilities (`bg-red-500`, `text-zinc-800/50`, etc.) via
+    -- `enable_tailwind = true`.
+    "brenoprata10/nvim-highlight-colors",
+    event = { "BufReadPost", "BufNewFile" },
+    opts = {
+      render = "virtual",
+      virtual_symbol = "■",
+      virtual_symbol_position = "inline",
+      virtual_symbol_prefix = " ",
+      virtual_symbol_suffix = "",
+      enable_hex = true,
+      enable_short_hex = true,
+      enable_rgb = true,
+      enable_hsl = true,
+      enable_named_colors = true,
+      enable_tailwind = true,
+    },
+  },
 }
