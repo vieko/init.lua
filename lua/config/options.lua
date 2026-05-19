@@ -96,13 +96,6 @@ opt.foldtext = "v:lua.require'utils.ui'.foldtext()"
 -- Clipboard: Let neovim auto-detect (pbcopy on macOS, wl-copy on Wayland, xclip on X11)
 -- No manual config needed - neovim handles it perfectly
 
--- [[ NETRW ]]
-vim.g.netrw_keepdir = 0
-vim.g.netrw_winsize = 20
-vim.g.netrw_banner = 0
-vim.g.netrw_liststyle = 3
-vim.g.netrw_browse_split = 4
-
 -- [[ DISABLE BUILTIN LANGUAGE PROVIDERS ]]
 vim.g.loaded_ruby_provider = 0
 vim.g.loaded_perl_provider = 0
@@ -112,6 +105,8 @@ vim.g.ruby_host_prog = nil
 vim.g.perl_host_prog = nil
 vim.g.node_host_prog = nil
 vim.g.python3_host_prog = nil
+
+-- [[ DISABLE NETRW ]] (replaced by snacks.explorer)
 vim.g.loaded_netrw = 1
 vim.g.loaded_netrwplugin = 1
 vim.g.loaded_netrwsettings = 1
