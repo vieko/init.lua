@@ -58,18 +58,18 @@ local function setup_quality_of_life_tweaks()
 end
 
 local function setup_diagnostics()
-  local diagnostic_goto = function(next, severity)
-    local go = next and vim.diagnostic.goto_next or vim.diagnostic.goto_prev
+  -- `vim.diagnostic.goto_next`/`goto_prev` were deprecated in Neovim 0.11
+  -- in favor of `vim.diagnostic.jump`.
+  local diagnostic_jump = function(count, severity)
     severity = severity and vim.diagnostic.severity[severity] or nil
     return function()
-      go({ severity = severity, float = false })
+      vim.diagnostic.jump({ count = count, severity = severity, float = false })
     end
   end
-  map("n", "]d", diagnostic_goto(true), { desc = "Go to next diagnostic" })
-  map("n", "[d", diagnostic_goto(false), { desc = "Go to previous diagnostic" })
-  map("n", "g]", diagnostic_goto(true), { desc = "Go to next diagnostic" })
-  map("n", "g[", diagnostic_goto(false), { desc = "Go to previous diagnostic" })
-  -- map("n", "gh", vim.diagnostic.open_float, { desc = "Line diagnostics" })
+  map("n", "]d", diagnostic_jump(1), { desc = "Go to next diagnostic" })
+  map("n", "[d", diagnostic_jump(-1), { desc = "Go to previous diagnostic" })
+  map("n", "g]", diagnostic_jump(1), { desc = "Go to next diagnostic" })
+  map("n", "g[", diagnostic_jump(-1), { desc = "Go to previous diagnostic" })
 end
 
 --- Setup all keymaps
