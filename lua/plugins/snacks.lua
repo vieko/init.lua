@@ -10,6 +10,19 @@ return {
       Snacks.setup({
         explorer = { replace_netrw = true },
         picker = {
+          sources = {
+            -- explorer overrides <c-t> to "terminal"; reclaim it for opening
+            -- the selected file in a new tab (the general picker default).
+            explorer = {
+              win = {
+                list = {
+                  keys = {
+                    ["<c-t>"] = "tab",
+                  },
+                },
+              },
+            },
+          },
           ---@diagnostic disable-next-line: missing-fields
           icons = {
             git = {
