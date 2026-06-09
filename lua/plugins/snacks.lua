@@ -71,7 +71,7 @@ return {
         -- noice.nvim owns `vim.notify` routing (see `core/editor.lua`).
         -- Enabling both wraps `vim.notify` twice and last-loaded wins.
         notifier = { enabled = false },
-        bigfile = { enabled = true },
+        bigfile = { enabled = true, line_length = 10000 },
         words = { enabled = false },
         util = { enabled = true },
         image = { enabled = false },

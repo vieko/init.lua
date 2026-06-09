@@ -32,6 +32,8 @@ return {
       end,
       formatters_by_ft = {
         sh = { "shfmt" },
+        json = { "jq" },
+        jsonc = { "prettier", "biome", stop_after_first = true },
         yaml = { "prettier", "dprint", stop_after_first = true },
         ["markdown"] = { "prettier", "dprint", stop_after_first = true },
         ["markdown.mdx"] = { "prettier", "dprint", stop_after_first = true },
