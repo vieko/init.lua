@@ -93,7 +93,7 @@ return {
       end, { desc = "Show keymaps" })
       -- SMART PICKER
       map("n", "<leader><leader>", function()
-        Snacks.picker.smart()
+        Snacks.picker.smart({ filter = { cwd = true } })
       end, { desc = "Smart find files" })
       -- EXPLORER
       map("n", "<C-b>", function()
