@@ -35,8 +35,6 @@ local spec = {
   { import = "langs.json" },
   { import = "langs.python" },
   { import = "langs.tailwind" },
-  -- { import = "langs.go" }, -- Disabled: Go not installed
-  -- { import = "langs.rust" }, -- Disabled: Rust not needed
 }
 
 require("lazy").setup({

@@ -1,4 +1,3 @@
-vim.env.ESLINT_D_PPID = vim.fn.getpid()
 return {
   {
     "williamboman/mason.nvim",
@@ -6,9 +5,6 @@ return {
     opts = {
       ensure_installed = {
         "shellcheck",
-        -- "eslint_d", -- Removed: ESLint LSP handles this, avoid redundancy
-        -- "oxlint", -- Disabled: not used, eslint_d is preferred
-        -- "golangci-lint", -- Disabled: Go not installed
       },
     },
   },
@@ -18,9 +14,8 @@ return {
     opts = {
       linters_by_ft = {
         sh = { "shellcheck" },
-        -- ESLint removed: ESLint LSP (plugins/eslint.lua) handles JS/TS linting
-        -- Keeping nvim-lint for other languages (shellcheck, etc.)
-        -- go = { "golangcilint" }, -- Disabled: Go not installed
+        -- ESLint LSP (plugins/eslint.lua) handles JS/TS linting.
+        -- nvim-lint covers everything else (shellcheck, etc.).
       },
       linters = {
         -- Custom linter definitions can go here
@@ -34,14 +29,6 @@ return {
       for name, linter in pairs(opts.linters) do
         lint.linters[name] = linter
       end
-
-      -- Ignore issue with missing eslint config file
-      lint.linters.eslint_d = require("lint.util").wrap(lint.linters.eslint_d, function(diagnostic)
-        if diagnostic.message:find("Error: Could not find config file") then
-          return nil
-        end
-        return diagnostic
-      end)
 
       vim.api.nvim_create_autocmd({ "BufWritePost", "BufReadPost", "InsertLeave" }, {
         callback = function()

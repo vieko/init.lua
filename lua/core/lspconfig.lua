@@ -236,17 +236,11 @@ return {
         -- Formatters
         "stylua",
         "prettier",
-        "prettierd",
+        "biome",
         "rustywind",
-        -- Linters & Spell checkers
-        "codespell",
-        "misspell",
-        "cspell",
-        "markdownlint",
         -- LSP servers
         "eslint-lsp",
         "tailwindcss-language-server",
-        "golangci-lint",
       },
       ui = {
         border = "rounded",

@@ -93,25 +93,6 @@ return {
             return Lsp.prettier_config_exists()
           end,
         },
-        prettierd = {
-          condition = function()
-            -- Same logic as prettier
-            local ft = vim.bo.filetype
-
-            if ft == "markdown" or ft == "markdown.mdx" then
-              return Lsp.prettier_config_exists()
-            end
-
-            local biome_path = Lsp.biome_config_path()
-            local has_biome = biome_path ~= nil and not biome_path:match("nvim")
-
-            if has_biome then
-              return false
-            end
-
-            return Lsp.prettier_config_exists()
-          end,
-        },
       },
     },
     init = function()
