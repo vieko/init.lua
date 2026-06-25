@@ -1,6 +1,10 @@
-local enable_eslint = vim.g.lsp_eslint_enable == "yes" or false
-
 local Lsp = require("utils.lsp")
+
+-- Auto-enable ESLint when a project config is detected, unless explicitly
+-- disabled. Override per-project with `vim.g.lsp_eslint_enable = "yes"|"no"`
+-- (e.g. in an exrc).
+local enable_eslint = vim.g.lsp_eslint_enable ~= "no"
+  and (vim.g.lsp_eslint_enable == "yes" or Lsp.eslint_config_exists())
 
 local eslint_config = {
   settings = {
