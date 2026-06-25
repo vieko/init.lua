@@ -5,7 +5,10 @@ return {
     cmd = { "Git", "G", "Gdiffsplit", "Gclog" },
   },
   { -- detect tabstops and shiftwidth automatically
+    -- `lazy = false`: under `defaults = { lazy = true }` a triggerless
+    -- spec never loads, which would silently disable indent detection.
     "tpope/vim-sleuth",
+    lazy = false,
   },
   { -- navigate between tmux and nvim panes
     "christoomey/vim-tmux-navigator",
@@ -331,6 +334,8 @@ return {
   },
   { -- Highlight todo, notes, etc in comments.
     "folke/todo-comments.nvim",
+    event = "VeryLazy",
+    cmd = { "TodoQuickFix", "TodoLocList", "TodoTrouble", "TodoTelescope" },
     dependencies = { "nvim-lua/plenary.nvim" },
     opts = { signs = false },
   },

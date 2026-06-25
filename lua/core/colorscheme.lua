@@ -3,6 +3,11 @@ return {
   {
     "catppuccin/nvim",
     name = "catppuccin",
+    -- `lazy = false` so `priority = 1000` actually takes effect and the
+    -- fallback colorscheme (when tinty is absent) loads at startup.
+    -- Without this, `defaults = { lazy = true }` leaves catppuccin with
+    -- no trigger and the fallback never fires.
+    lazy = false,
     priority = 1000,
     config = function()
       require("catppuccin").setup({

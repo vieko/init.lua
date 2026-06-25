@@ -1,5 +1,4 @@
 local Lsp = require("utils.lsp")
-local typescript_lsp = "ts_ls" -- Only using vtsls
 
 return {
   {

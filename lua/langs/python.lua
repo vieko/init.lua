@@ -10,13 +10,9 @@ return {
     "neovim/nvim-lspconfig",
     opts = {
       servers = {
-        pyright = {
-          enabled = lsp == "pyright",
-        },
-        basedpyright = {
-          enabled = lsp == "basedpyright",
-        },
-        -- Either pyright or basedpyright should be enabled
+        -- Enable the configured Python LSP (`lsp` above). Switch by
+        -- changing that local; the unused one stays out of `servers`
+        -- entirely so it's neither configured nor mason-installed.
         [lsp] = {
           enabled = true,
         },

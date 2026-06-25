@@ -24,7 +24,6 @@ local M = {
   stop_lsp_client_by_name = client.stop_lsp_client_by_name,
 
   -- From actions
-  execute = actions.execute,
   action = actions.action,
 
   -- From core
