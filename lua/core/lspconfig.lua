@@ -157,6 +157,16 @@ return {
         end)
       end
 
+      -- Neovim 0.12 enables LSP document-color highlighting globally, which
+      -- paints hex/rgb/Tailwind values in their actual color. Turn it off for
+      -- each buffer whose server advertises documentColor; toggle per buffer
+      -- with `<leader>uc` (utils.toggle.document_color).
+      require("utils.lsp").on_supports_method("textDocument/documentColor", function(_, buffer)
+        if vim.api.nvim_buf_is_valid(buffer) then
+          require("utils.toggle").document_color(buffer, false)
+        end
+      end)
+
       vim.diagnostic.config(vim.deepcopy(opts.diagnostics))
 
       local servers = opts.servers

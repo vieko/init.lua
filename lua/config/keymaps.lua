@@ -55,6 +55,12 @@ local function setup_quality_of_life_tweaks()
   -- Preserve visual selection while indenting
   map("v", "<", "<gv", { desc = "Indent left and maintain selection" })
   map("v", ">", ">gv", { desc = "Indent right and maintain selection" })
+
+  -- Toggle LSP document-color highlighting (colors hex/rgb/Tailwind values
+  -- in their actual color). Off by default; see lua/core/lspconfig.lua.
+  map("n", "<leader>uc", function()
+    require("utils.toggle").document_color()
+  end, { desc = "Toggle LSP color highlighting" })
 end
 
 local function setup_diagnostics()

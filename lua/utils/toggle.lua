@@ -15,4 +15,22 @@ function M.inlay_hints(buf, value)
   end
 end
 
+-- Neovim 0.12's built-in LSP document-color highlighting paints hex/rgb and
+-- Tailwind classes in their actual color (default style "background"). It is
+-- enabled globally on load; we disable it per buffer on attach (see
+-- lspconfig.lua) and use this to toggle it back on for the current buffer.
+---@param buf? number
+---@param value? boolean
+function M.document_color(buf, value)
+  local dc = vim.lsp.document_color
+  if not (dc and dc.enable) then
+    return
+  end
+  buf = buf or 0
+  if value == nil then
+    value = not dc.is_enabled({ bufnr = buf })
+  end
+  dc.enable(value, { bufnr = buf })
+end
+
 return M
